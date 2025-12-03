@@ -11,9 +11,9 @@ class ChatNodeController extends Controller
         return ChatNode::find(1);
     }
 
-    public function next($node, $option) {
-        $node = ChatNode::find($node);
-        $nextId = $node->next_nodes[$option];
+    public function next(Request $request) {
+        $node = ChatNode::find($request->node_id);
+        $nextId = $node->next_nodes[$request->selected_option];
 
         return ChatNode::find($nextId);
     }
