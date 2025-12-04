@@ -18,7 +18,14 @@ class ChatNodeController extends Controller
 
     public function insert(Request $request) {
         try{
+            $title = $request->title;
+            if (!$title) {
+                $lastId = (ChatNode::max('id') ?? 0) + 1;
+                $title = "Node " . $lastId;
+            }
+
             ChatNode::create([
+                'title' => $title,
                 'question' => $request->question,
                 'options' =>  $request->input('options'),
                 'next_nodes' => $request->input('next_nodes'),
@@ -46,6 +53,12 @@ class ChatNodeController extends Controller
         try {
             $node = ChatNode::find($id);
 
+            $title = $request->title;
+            if (!$title) {
+                $title = "Node " . $id;
+            }
+
+            $node->title = $title;
             $node->question = $request->question;
             $node->options = $request->input('options');
             $node->next_nodes = $request->input('next_nodes');
@@ -73,7 +86,7 @@ class ChatNodeController extends Controller
     public function destroy($id) {
         try {
             $node = ChatNode::find($id);
-            $node::delete();
+            $node->delete();
 
             $response = [
                 'message' => 'El mensaje se elimino correctamente',

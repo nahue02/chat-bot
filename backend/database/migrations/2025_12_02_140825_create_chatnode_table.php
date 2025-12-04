@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('chatnode', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->nullable();
             $table->text('question');
             $table->json('options')->nullable();
             $table->json('next_nodes')->nullable();

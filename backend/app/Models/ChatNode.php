@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ChatNode extends Model
 {
     protected $fillable = [
+        'title',
         'question',
         'options',
         'next_nodes',

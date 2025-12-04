@@ -14,7 +14,7 @@ class ChatNodeSeeder extends Seeder
     public function run(): void
     {
         ChatNode::create([
-            'id' => 1,
+            'title' => 'Inicio',
             'question' =>
                 "Fui entrenado para poder resolver las dudas más frecuentes relacionadas con nuestra Dirección. Por favor, elija una de las opciones de más abajo:",
             'options' => ['Retiros', 'Pensiones'],
@@ -26,7 +26,7 @@ class ChatNodeSeeder extends Seeder
         ]);
 
         ChatNode::create([
-            'id' => 2,
+            'title' => 'Retiros',
             'question' => 'Para retiros puedo ayudarlo con...',
             'options' => ['Certificados'],
             'next_nodes' => [
@@ -36,7 +36,7 @@ class ChatNodeSeeder extends Seeder
         ]);
 
         ChatNode::create([
-            'id' => 3,
+            'title' => 'Pensiones',
             'question' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...',
             'options' => ['A donde debo dirigirme para iniciar una pensión militar'],
             'next_nodes' => [
@@ -46,7 +46,7 @@ class ChatNodeSeeder extends Seeder
         ]);
 
         ChatNode::create([
-            'id' => 4,
+            'title' => 'Certificados',
             'question' =>
                 'Los certificados que otorga la Dirección de Bienestar son los siguientes:
                 -ANSES
@@ -61,7 +61,7 @@ class ChatNodeSeeder extends Seeder
         ]);
 
          ChatNode::create([
-            'id' => 5,
+            'title' => 'Iniciar Pensión',
             'question' =>
                 'Puede realizarlo de manera presencial en la Unidad Militar más próxima a su domicilio.',
             'options' => [],

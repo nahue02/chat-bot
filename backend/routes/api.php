@@ -12,4 +12,4 @@ Route::get('/nodes/{id}', [ChatNodeController::class, 'get_node_by_id']);
 
 Route::post('/nodes/create', [ChatNodeController::class, 'insert']);
 Route::put('/nodes/update/{id}', [ChatNodeController::class, 'update']);
-Route::delete('/nodes/delete', [ChatNodeController::class, 'destroy']);
+Route::delete('/nodes/delete/{id}', [ChatNodeController::class, 'destroy']);
