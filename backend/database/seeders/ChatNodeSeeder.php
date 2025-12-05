@@ -15,39 +15,36 @@ class ChatNodeSeeder extends Seeder
     {
         ChatNode::create([
             'title' => 'Inicio',
-            'question' =>
+            'message' =>
                 "Fui entrenado para poder resolver las dudas más frecuentes relacionadas con nuestra Dirección. Por favor, elija una de las opciones de más abajo:",
             'options' => ['Retiros', 'Pensiones'],
             'next_nodes' => [
                 'Retiros' => 2,
                 'Pensiones' => 3
-            ],
-            'is_end' => false
+            ]
         ]);
 
         ChatNode::create([
             'title' => 'Retiros',
-            'question' => 'Para retiros puedo ayudarlo con...',
+            'message' => 'Para retiros puedo ayudarlo con...',
             'options' => ['Certificados'],
             'next_nodes' => [
                 'Certificados' => 4,
-            ],
-            'is_end' => false
+            ]
         ]);
 
         ChatNode::create([
             'title' => 'Pensiones',
-            'question' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...',
+            'message' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...',
             'options' => ['A donde debo dirigirme para iniciar una pensión militar'],
             'next_nodes' => [
                 'A donde debo dirigirme para iniciar una pensión militar' => 5
-            ],
-            'is_end' => false
+            ]
         ]);
 
         ChatNode::create([
             'title' => 'Certificados',
-            'question' =>
+            'message' =>
                 'Los certificados que otorga la Dirección de Bienestar son los siguientes:
                 -ANSES
                 -HABER TOPE
@@ -56,17 +53,15 @@ class ChatNodeSeeder extends Seeder
                 -MOVILIZADOS
                 -NO MOVILIZADO CERTIFICANDO QUE PRESTO SERVICIO EN LA UNIDAD CERCANA',
             'options' => [],
-            'next_nodes' => [],
-            'is_end' => true
+            'next_nodes' => []
         ]);
 
          ChatNode::create([
             'title' => 'Iniciar Pensión',
-            'question' =>
+            'message' =>
                 'Puede realizarlo de manera presencial en la Unidad Militar más próxima a su domicilio.',
             'options' => [],
-            'next_nodes' => [],
-            'is_end' => true
+            'next_nodes' => []
         ]);
     }
 }

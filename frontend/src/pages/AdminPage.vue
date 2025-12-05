@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../services/api'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const nodes = ref([])
 
 onMounted(async () => {
@@ -20,18 +22,16 @@ const deleteNode = async (id) => {
   await api.delete('nodes/delete/' + id)
 }
 
-
-
 </script>
 
 <template>
     <div class="container">
       
         <h1>Admin Page</h1>
-        <button @click="$router.push('/')">
+        <button @click="router.push('/')">
           Volver al chat
         </button>
-        <button @click="$router.push('/create')">
+        <button @click="router.push('/create')">
           Crear nuevo mensaje
         </button>
         <ul class="list-group">
@@ -61,7 +61,7 @@ const deleteNode = async (id) => {
                       </h5>
 
                       <h6 class="card-subtitle mb-2 mt-2 text-body-secondary">
-                        {{ node.question }}
+                        {{ node.message }}
                       </h6>
                     </div>
 

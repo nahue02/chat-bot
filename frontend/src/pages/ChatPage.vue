@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../services/api'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const messages = ref([])
 const currentNode = ref(null)
@@ -11,7 +14,7 @@ onMounted(async () => {
 })
 
 const selectOption = async (option) => {
-  messages.value.push({ from: 'bot', text: currentNode.value.question })
+  messages.value.push({ from: 'bot', text: currentNode.value.message })
   messages.value.push({ from: 'user', text: option })
 
   const { data } = await api.post('chat/next', {
@@ -25,7 +28,7 @@ const selectOption = async (option) => {
 
 <template>
   <div>
-    <button @click="$router.push('/admin')">
+    <button @click="router.push('/admin')">
       Panel de Administracion
     </button>
     <div class="chat-container">
@@ -40,8 +43,8 @@ const selectOption = async (option) => {
         </div>
       </div>
 
-      <div v-if="currentNode" class="current-question">
-        <div class="message bot">{{ currentNode.question }}</div>
+      <div v-if="currentNode" class="current-message">
+        <div class="message bot">{{ currentNode.message }}</div>
 
         <div class="options">
           <button

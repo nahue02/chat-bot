@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('chatnode', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-            $table->text('question');
+            $table->text('message');
             $table->json('options')->nullable();
             $table->json('next_nodes')->nullable();
-            $table->boolean('is_end')->default(false);
             $table->timestamps();
         });
     }

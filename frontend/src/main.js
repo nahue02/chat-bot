@@ -10,6 +10,6 @@ import 'bootstrap'
 
 
 createApp(App)
-    .use(router)
-    .use(Vuesax)
-    .mount('#app')
+.use(Vuesax)
+.use(router)
+.mount('#app')

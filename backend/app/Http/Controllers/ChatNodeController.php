@@ -26,10 +26,9 @@ class ChatNodeController extends Controller
 
             ChatNode::create([
                 'title' => $title,
-                'question' => $request->question,
+                'message' => $request->message,
                 'options' =>  $request->input('options'),
                 'next_nodes' => $request->input('next_nodes'),
-                'is_end' => $request->is_end
             ]);
 
             $response = [
@@ -59,10 +58,9 @@ class ChatNodeController extends Controller
             }
 
             $node->title = $title;
-            $node->question = $request->question;
+            $node->message = $request->message;
             $node->options = $request->input('options');
             $node->next_nodes = $request->input('next_nodes');
-            $node->is_end = $request->is_end;
 
             $node->save();
 
@@ -85,6 +83,15 @@ class ChatNodeController extends Controller
 
     public function destroy($id) {
         try {
+            if ($id == 1) {
+                $response = [
+                    'message' => 'No se puede eliminar el nodo inicial.',
+                    'status' => 400
+                ];
+
+                return response()->json($response);
+            }
+
             $node = ChatNode::find($id);
             $node->delete();
 

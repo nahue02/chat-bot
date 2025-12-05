@@ -8,10 +8,9 @@ class ChatNode extends Model
 {
     protected $fillable = [
         'title',
-        'question',
+        'message',
         'options',
         'next_nodes',
-        'is_end'
     ];
 
     protected $casts = [
