@@ -48,7 +48,7 @@ const selectOption = async (option) => {
 
         <div class="options">
           <button
-            v-for="option in currentNode.options"
+            v-for="option in currentNode.next_nodes"
             :key="option"
             @click="selectOption(option)"
           >

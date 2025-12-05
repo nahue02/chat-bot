@@ -27,7 +27,6 @@ class ChatNodeController extends Controller
             ChatNode::create([
                 'title' => $title,
                 'message' => $request->message,
-                'options' =>  $request->input('options'),
                 'next_nodes' => $request->input('next_nodes'),
             ]);
 
@@ -59,7 +58,6 @@ class ChatNodeController extends Controller
 
             $node->title = $title;
             $node->message = $request->message;
-            $node->options = $request->input('options');
             $node->next_nodes = $request->input('next_nodes');
 
             $node->save();

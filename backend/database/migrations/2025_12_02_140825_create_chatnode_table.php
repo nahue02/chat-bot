@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->text('message');
-            $table->json('options')->nullable();
             $table->json('next_nodes')->nullable();
             $table->timestamps();
         });

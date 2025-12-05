@@ -17,7 +17,6 @@ class ChatNodeSeeder extends Seeder
             'title' => 'Inicio',
             'message' =>
                 "Fui entrenado para poder resolver las dudas más frecuentes relacionadas con nuestra Dirección. Por favor, elija una de las opciones de más abajo:",
-            'options' => ['Retiros', 'Pensiones'],
             'next_nodes' => [
                 'Retiros' => 2,
                 'Pensiones' => 3
@@ -27,7 +26,6 @@ class ChatNodeSeeder extends Seeder
         ChatNode::create([
             'title' => 'Retiros',
             'message' => 'Para retiros puedo ayudarlo con...',
-            'options' => ['Certificados'],
             'next_nodes' => [
                 'Certificados' => 4,
             ]
@@ -36,7 +34,6 @@ class ChatNodeSeeder extends Seeder
         ChatNode::create([
             'title' => 'Pensiones',
             'message' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...',
-            'options' => ['A donde debo dirigirme para iniciar una pensión militar'],
             'next_nodes' => [
                 'A donde debo dirigirme para iniciar una pensión militar' => 5
             ]
@@ -52,7 +49,6 @@ class ChatNodeSeeder extends Seeder
                 -SERVICIOS MILITARES FINES LABORALES (FECHA DE INGRESO Y RETIRO)
                 -MOVILIZADOS
                 -NO MOVILIZADO CERTIFICANDO QUE PRESTO SERVICIO EN LA UNIDAD CERCANA',
-            'options' => [],
             'next_nodes' => []
         ]);
 
@@ -60,7 +56,6 @@ class ChatNodeSeeder extends Seeder
             'title' => 'Iniciar Pensión',
             'message' =>
                 'Puede realizarlo de manera presencial en la Unidad Militar más próxima a su domicilio.',
-            'options' => [],
             'next_nodes' => []
         ]);
     }
