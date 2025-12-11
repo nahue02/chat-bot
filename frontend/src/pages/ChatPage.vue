@@ -14,11 +14,11 @@ onMounted(async () => {
 })
 
 const selectOption = async (option) => {
+  
   messages.value.push({ from: 'bot', text: currentNode.value.message })
   messages.value.push({ from: 'user', text: option })
-
+  
   const { data } = await api.post('chat/next', {
-    node_id: currentNode.value.id,
     selected_option: option
   })
 
@@ -48,11 +48,11 @@ const selectOption = async (option) => {
 
         <div class="options">
           <button
-            v-for="option in currentNode.next_nodes"
-            :key="option"
-            @click="selectOption(option)"
+            v-for="option in currentNode.options"
+            :key="option.next_node"
+            @click="selectOption(option.next_node)"
           >
-            {{ option }}
+            {{ option.text }} - {{  option.next_node }}
           </button>
         </div>
       </div>

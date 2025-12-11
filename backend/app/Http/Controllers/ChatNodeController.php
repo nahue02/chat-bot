@@ -24,10 +24,21 @@ class ChatNodeController extends Controller
                 $title = "Node " . $lastId;
             }
 
+            $options = collect($request->options)
+                ->filter(fn($opt) => $opt['text'] !== '' && $opt['next_node'] !== '')
+                ->map(function ($opt) {
+                    return [
+                        'text' => $opt['text'],
+                        'next_node' => $opt['next_node'],
+                    ];
+                })
+                ->values()
+                ->toArray();
+
             ChatNode::create([
                 'title' => $title,
                 'message' => $request->message,
-                'next_nodes' => $request->input('next_nodes'),
+                'options' => $options,
             ]);
 
             $response = [
@@ -38,7 +49,7 @@ class ChatNodeController extends Controller
             return response()->json($response);
         } catch(Exception $e) {
             $response = [
-                'message' => 'Ocurrio un error, revise los campos o hablen con desarrollo XD',
+                'message' => 'Ocurrio un error',
                 'error' => $e,
                 'status' => 500
             ];
@@ -58,19 +69,24 @@ class ChatNodeController extends Controller
 
             $node->title = $title;
             $node->message = $request->message;
-            $node->next_nodes = $request->input('next_nodes');
+
+            $options = collect($request->options)
+                ->filter(fn($opt) => $opt['text'] !== '' && $opt['next_node'] !== '')
+                ->values()
+                ->toArray();
+            $node->options = $options;
 
             $node->save();
 
             $response = [
-                'message' => 'El mensaje se actualizo correctamente. Bien peke',
+                'message' => 'El mensaje se actualizo correctamente',
                 'status' => 500
             ];
 
             return response()->json($response);
         } catch (Exception $e) {
             $response = [
-                'message' => 'Ocurrio un error, revise los campos o hablen con desarrollo XD',
+                'message' => 'Ocurrio un error',
                 'error' => $e,
                 'status' => 500
             ];
@@ -101,7 +117,7 @@ class ChatNodeController extends Controller
             return response()->json($response);
         } catch (Exception $e) {
             $response = [
-                'message' => 'Ocurrio un error, revise los campos o hablen con desarrollo XD',
+                'message' => 'Ocurrio un error',
                 'error' => $e,
                 'status' => 500
             ];
@@ -115,8 +131,7 @@ class ChatNodeController extends Controller
     }
 
     public function next(Request $request) {
-        $node = ChatNode::find($request->node_id);
-        $nextId = $node->next_nodes[$request->selected_option];
+        $nextId = $request->selected_option;
 
         return ChatNode::find($nextId);
     }

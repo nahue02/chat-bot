@@ -9,11 +9,11 @@ class ChatNode extends Model
     protected $fillable = [
         'title',
         'message',
-        'next_nodes',
+        'options',
     ];
 
     protected $casts = [
-        'next_nodes' => 'array',
+        'options' => 'array',
     ];
 
     protected $table = 'chatnode';
