@@ -28,9 +28,6 @@ const selectOption = async (option) => {
 
 <template>
   <div>
-    <button @click="router.push('/admin')">
-      Panel de Administracion
-    </button>
     <div class="chat-container">
       <!-- Mensajes -->
       <div class="messages">

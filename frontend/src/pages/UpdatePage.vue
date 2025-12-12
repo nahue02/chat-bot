@@ -14,8 +14,8 @@ const form = ref({
 })
 
 const nodes = ref([])
+const errors = ref([])
 
-// 👉 Agregar nueva opción
 const addOption = () => {
   form.value.options.push({
     _id: crypto.randomUUID(),
@@ -24,33 +24,31 @@ const addOption = () => {
   })
 }
 
-// 👉 Eliminar opción
 const removeOption = (index) => {
   form.value.options.splice(index, 1)
 }
 
-// 👉 Guardar cambios
 const submitForm = async () => {
-  await api.put(`/nodes/update/${nodeId}`, form.value)
-  router.push('/admin')
+  try {
+    await api.put(`/nodes/update/${nodeId}`, form.value)
+    router.push('/admin')
+  } catch (error) {
+    errors.value = error.response.data.errors
+  }
 }
 
 onMounted(async () => {
-  // Obtener nodos para el select
   const allNodes = await api.get('/nodes/all')
   nodes.value = allNodes.data
 
-  // Obtener el nodo actual
   const res = await api.get(`/nodes/${nodeId}`)
   const data = res.data
 
-  // Cargar los datos en el form
   form.value.title = data.title
   form.value.message = data.message
 
-  // Convertir opciones del backend a opciones de Vue
   form.value.options = data.options?.map(opt => ({
-    _id: crypto.randomUUID(),  // ID local para Vue
+    _id: crypto.randomUUID(),
     text: opt.text,
     next_node: opt.next_node
   })) || []
@@ -60,24 +58,22 @@ onMounted(async () => {
 <template>
   <div>
     <button @click="router.push('/admin')">Volver al panel</button>
-
     <h1>Editar mensaje</h1>
+
+    <p v-if="errors.title" class="error">{{ errors.title[0] }}</p>
 
     <form @submit.prevent="submitForm">
 
-      <!-- Título -->
       <div>
         <label>Título</label>
         <input v-model="form.title" type="text" />
       </div>
 
-      <!-- Mensaje -->
       <div>
         <label>Mensaje</label>
         <textarea v-model="form.message" required></textarea>
       </div>
 
-      <!-- Opciones -->
       <div>
         <label>Opciones</label>
 

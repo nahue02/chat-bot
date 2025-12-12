@@ -4,6 +4,7 @@ import api from '../services/api'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const errors = ref([])
 
 const form = ref({
   title: '',
@@ -24,9 +25,13 @@ const removeOption = (index) => {
 }
 
 const submitForm = async () => {
-  console.log(JSON.stringify(form.value, null, 2))
-  await api.post('/nodes/create', form.value)
-  router.push('/admin')
+  try {
+    await api.post('/nodes/create', form.value)
+    router.push('/admin')
+  } catch (error) {
+    errors.value = error.response.data.errors
+  }
+  
 }
 
 const nodes = ref([])
@@ -44,6 +49,8 @@ onMounted(async () => {
     <button @click="router.push('/admin')">Volver al panel</button>
 
     <h1>Create a message</h1>
+
+    <p v-if="errors.title" class="error">{{ errors.title[0] }}</p>
 
     <form @submit.prevent="submitForm">
       <div>
