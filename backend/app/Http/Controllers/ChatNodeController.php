@@ -3,136 +3,110 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChatNode;
+use App\Models\NodeOption;
 use Exception;
 use Illuminate\Http\Request;
 
 class ChatNodeController extends Controller
 {
-    public function get_all_nodes() {
-        return ChatNode::all();
+    public function index() {
+        return ChatNode::with('options')->get();
     }
 
-    public function get_node_by_id($id) {
-        return ChatNode::find($id);
+    public function show($id) {
+        $node = ChatNode::with('options')->find($id);
+
+         if (!$node) {
+            return response()->json(['message' => 'Nodo no encontrado'], 404);
+        }
+
+        return $node;
     }
 
-    public function insert(Request $request) {
+    public function store(Request $request) {
+        $request->validate([
+                'title' => 'nullable|string',
+                'message' => 'required|string',
+                'options' => 'array',
+                'options.*.text' => 'required|string',
+                'options.*.next_node' => 'required|integer|exists:chat_node,id',
+        ]);
+
         try{
-            $title = $request->title;
-            if (!$title) {
-                $lastId = (ChatNode::max('id') ?? 0) + 1;
-                $title = "Node " . $lastId;
-            }
-
-            $options = collect($request->options)
-                ->filter(fn($opt) => $opt['text'] !== '' && $opt['next_node'] !== '')
-                ->map(function ($opt) {
-                    return [
-                        'text' => $opt['text'],
-                        'next_node' => $opt['next_node'],
-                    ];
-                })
-                ->values()
-                ->toArray();
-
-            ChatNode::create([
-                'title' => $title,
+            $node = ChatNode::create([
+                'title' => $request->title ?? 'Node ' . (ChatNode::max('id') + 1),
                 'message' => $request->message,
-                'options' => $options,
             ]);
 
-            $response = [
-                'message' => 'El mensaje se creo correctamente.',
-                'status' => 201
-            ];
+            foreach ($request->options as $opt) {
+                NodeOption::create([
+                    'chat_node_id' => $node->id,
+                    'text' => $opt['text'],
+                    'next_node' => $opt['next_node'],
+                ]);
+            }
 
-            return response()->json($response);
+            return response()->json(['message' => 'Nodo creado correctamente'], 201);
         } catch(Exception $e) {
-            $response = [
-                'message' => 'Ocurrio un error',
-                'error' => $e,
-                'status' => 500
-            ];
-
-            return response()->json($response);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function update($id, Request $request){
+        $request->validate([
+                'title' => 'nullable|string',
+                'message' => 'required|string',
+                'options' => 'array',
+                'options.*.text' => 'required|string',
+                'options.*.next_node' => 'required|integer|exists:chat_node,id',
+        ]);
+
         try {
             $node = ChatNode::find($id);
 
-            $title = $request->title;
-            if (!$title) {
-                $title = "Node " . $id;
+            if (!$node) {
+                return response()->json(['message' => 'Nodo no encontrado'], 404);
             }
 
-            $node->title = $title;
-            $node->message = $request->message;
+            $node->update(([
+                'title' => $request->title ?? 'Node ' . $id,
+                'message' => $request->message,
+            ]));
 
-            $options = collect($request->options)
-                ->filter(fn($opt) => $opt['text'] !== '' && $opt['next_node'] !== '')
-                ->values()
-                ->toArray();
-            $node->options = $options;
+            NodeOption::where('chat_node_id', $id)->delete();
 
-            $node->save();
+            foreach ($request->options as $opt) {
+                NodeOption::create([
+                    'chat_node_id' => $node->id,
+                    'text' => $opt['text'],
+                    'next_node' => $opt['next_node'],
+                ]);
+            }
 
-            $response = [
-                'message' => 'El mensaje se actualizo correctamente',
-                'status' => 500
-            ];
-
-            return response()->json($response);
+            return response()->json(['message' => 'Nodo actualizado correctamente'], 200);
         } catch (Exception $e) {
-            $response = [
-                'message' => 'Ocurrio un error',
-                'error' => $e,
-                'status' => 500
-            ];
-
-            return response()->json($response);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function destroy($id) {
-        try {
-            if ($id == 1) {
-                $response = [
-                    'message' => 'No se puede eliminar el nodo inicial.',
-                    'status' => 400
-                ];
+        $node = ChatNode::find($id);
 
-                return response()->json($response);
-            }
-
-            $node = ChatNode::find($id);
-            $node->delete();
-
-            $response = [
-                'message' => 'El mensaje se elimino correctamente',
-                'status' => 201
-            ];
-
-            return response()->json($response);
-        } catch (Exception $e) {
-            $response = [
-                'message' => 'Ocurrio un error',
-                'error' => $e,
-                'status' => 500
-            ];
-
-            return response()->json($response);
+        if (!$node) {
+            return response()->json(['message' => 'Nodo no encontrado'], 404);
         }
+
+        $node->delete();
+
+        return response()->json(['message' => 'Nodo eliminado correctamente'], 200);
     }
 
     public function start() {
-        return ChatNode::find(1);
+        return ChatNode::with('options')->find(1);
     }
 
     public function next(Request $request) {
         $nextId = $request->selected_option;
-
-        return ChatNode::find($nextId);
+        return ChatNode::with('options')->find($nextId);
     }
 }

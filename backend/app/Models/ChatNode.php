@@ -9,12 +9,11 @@ class ChatNode extends Model
     protected $fillable = [
         'title',
         'message',
-        'options',
     ];
 
-    protected $casts = [
-        'options' => 'array',
-    ];
+    public function options(){
+        return $this->hasMany(NodeOption::class);
+    }
 
-    protected $table = 'chatnode';
+    protected $table = 'chat_node';
 }

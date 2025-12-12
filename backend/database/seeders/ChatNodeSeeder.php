@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ChatNode;
+use App\Models\NodeOption;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,54 +14,43 @@ class ChatNodeSeeder extends Seeder
      */
     public function run(): void
     {
-        ChatNode::create([
+        // 1. Inicio
+        $inicio = ChatNode::create([
             'title' => 'Inicio',
             'message' =>
-                "Fui entrenado para poder resolver las dudas más frecuentes relacionadas con nuestra Dirección. Por favor, elija una de las opciones de más abajo:",
-            'options' => [
-                ["text" => "Retiros", "next_node" => 2],
-                ["text" => "Pensiones", "next_node" => 3]
-            ]
+                "Fui entrenado para poder resolver las dudas más frecuentes relacionadas con nuestra Dirección.
+                Por favor, elija una de las opciones de más abajo:"
         ]);
 
-        ChatNode::create([
+        // 2. Retiros
+        $retiros = ChatNode::create([
             'title' => 'Retiros',
-            'message' => 'Para retiros puedo ayudarlo con...',
-            'options' => [
-                ["text" => "Certificados", "next_node" => 4]
-            ]
+            'message' => 'Para retiros puedo ayudarlo con...'
         ]);
 
-        ChatNode::create([
+        // 3. Pensiones
+        $pensiones = ChatNode::create([
             'title' => 'Pensiones',
-            'message' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...',
-            'options' => [
-                ["text" => "Iniciar Pension", "next_node" => 5]
-            ]
+            'message' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...'
         ]);
 
-        ChatNode::create([
-            'title' => 'Certificados',
-            'message' =>
-                'Los certificados que otorga la Dirección de Bienestar son los siguientes:
-                -ANSES
-                -HABER TOPE
-                -DESTINOS FINES LABORALES (EMPRESA DE SEGURIDAD)
-                -SERVICIOS MILITARES FINES LABORALES (FECHA DE INGRESO Y RETIRO)
-                -MOVILIZADOS
-                -NO MOVILIZADO CERTIFICANDO QUE PRESTO SERVICIO EN LA UNIDAD CERCANA',
-            'options' => [
-                ["text" => "Quiero hacer otra consula", "next_node" => 1]
-            ]
+        /*
+        |--------------------------------------------------------------------------
+        | OPCIONES
+        |--------------------------------------------------------------------------
+        */
+
+        // Inicio → Retiros / Pensiones
+        NodeOption::create([
+            'chat_node_id' => $inicio->id,
+            'text' => 'Retiros',
+            'next_node' => $retiros->id
         ]);
 
-         ChatNode::create([
-            'title' => 'Iniciar Pensión',
-            'message' =>
-                'Puede realizarlo de manera presencial en la Unidad Militar más próxima a su domicilio.',
-            'options' => [
-                ["text" => "Quiero hacer otra consula", "next_node" => 1]
-            ]
+        NodeOption::create([
+            'chat_node_id' => $inicio->id,
+            'text' => 'Pensiones',
+            'next_node' => $pensiones->id
         ]);
     }
 }

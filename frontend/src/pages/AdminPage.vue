@@ -12,13 +12,11 @@
     console.log(nodes.value)
   })
 
-  const editNode = (node) => {
-    console.log("Editar:", node)
-    // acá navegas o abrís modal
+  const editNode = (id) => {
+    router.push('/edit/' + id)
   }
 
   const deleteNode = async (id) => {
-    console.log("Eliminar:", id)
     await api.delete('nodes/delete/' + id)
   }
 
@@ -41,15 +39,15 @@
 
       <ul>
         <li v-for="node in nodes" :key="node.id">
-          <strong>{{ node.id }}:</strong> {{ node.title }}
-          <button @click="editNode(node)">Editar</button>
+          <strong>{{ node.id }} - {{ node.title }}</strong>
+          <button @click="editNode(node.id)">Editar</button>
           <button @click="deleteNode(node.id)">Eliminar</button>
           <br>
           <p>
             {{ node.message }}
           </p>
           <ul>
-            <li v-for="option in node.options" :key="option.text">
+            <li v-for="option in node.options" :key="option.id">
               - {{ option.text }} (next message: {{ option.next_node }})
             </li>
           </ul>
