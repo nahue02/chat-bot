@@ -2,7 +2,7 @@
     <div class="mb-4">
       <div class="mb-2">
         <v-avatar class="mr-2" :image=avatar></v-avatar>
-        <span class="font-weight-medium">{{username}}</span>
+        <span class="font-weight-semibold">{{username}}</span>
       </div>
       <v-sheet
           class="pa-4 rounded-be-lg rounded-te-lg rounded-bs-lg"

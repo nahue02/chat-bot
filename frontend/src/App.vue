@@ -1,6 +1,5 @@
 <script setup>
   import NavigationDrawer from './components/NavigationDrawer.vue';
-  import MyNavigationDrawer from './components/MyNavigationDrawer.vue';
 </script>
 
 <template>

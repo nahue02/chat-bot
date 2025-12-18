@@ -1,9 +1,5 @@
 <template>
-    <div>
-        <v-btn class="mr-2 d-flex" variant="outlined" density="comfortable">
-            {{ text }}
-        </v-btn>
-    </div>
+    <v-btn variant="outlined" density="comfortable" class="text-subtitle-1" :text="text"/>
 </template>
 
 <script setup>
