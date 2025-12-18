@@ -57,7 +57,6 @@ onMounted(async () => {
 
 <template>
   <div>
-    <button @click="router.push('/admin')">Volver al panel</button>
     <h1>Editar mensaje</h1>
 
     <p v-if="errors.title" class="error">{{ errors.title[0] }}</p>

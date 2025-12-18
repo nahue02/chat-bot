@@ -68,6 +68,12 @@ class ChatNodeController extends Controller
                 return response()->json(['message' => 'Nodo no encontrado'], 404);
             }
 
+            foreach ($request->options as $opt) {
+                if ($node->id == $opt['next_node']){
+                    return response()->json(['message' => 'Una opción no puede dirigir al mismo nodo'], 400);
+                }
+            }
+
             $node->update(([
                 'title' => $request->title ?? 'Node ' . $id,
                 'message' => $request->message,

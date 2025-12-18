@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import api from '../services/api'
 import { useRouter } from 'vue-router'
+import ChatMessage from '@/components/ChatMessage.vue'
+import ChatOption from '@/components/ChatOption.vue'
 
 const router = useRouter()
 
@@ -27,83 +29,20 @@ const selectOption = async (option) => {
 </script>
 
 <template>
-  <div>
-    <div class="chat-container">
-      <!-- Mensajes -->
-      <div class="messages">
-        <div
-          v-for="(msg, index) in messages"
-          :key="index"
-          :class="['message', msg.from]"
-        >
-          {{ msg.text }}
-        </div>
-      </div>
-
-      <div v-if="currentNode" class="current-message">
-        <div class="message bot">{{ currentNode.message }}</div>
-
-        <div class="options">
-          <button
-            v-for="option in currentNode.options"
-            :key="option.id"
-            @click="selectOption(option)"
-          >
-            {{ option.text }} {{ option.next_node }}
-          </button>
-        </div>
-      </div>
-    </div>
-    </div>
+  <v-container>
+  <chat-message 
+    v-for="(msg, index) in messages" 
+    :key="index" 
+    :message="msg.text" 
+    :from="msg.from"
+  />
+  <div v-if="currentNode">
+    <chat-message 
+      :message="currentNode.message" 
+      :from="bot"
+    />
+    <chat-option v-for="option in currentNode.options" :key="option.id" @click="selectOption(option)" :text="option.text"></chat-option>
+  </div>
+</v-container>
 </template>
 
-<style>
-.chat-container {
-  width: 400px;
-  margin: auto;
-  font-family: sans-serif;
-}
-
-.messages {
-  margin-bottom: 20px;
-}
-
-.message {
-  padding: 8px 12px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  max-width: 80%;
-}
-
-.message.bot {
-  background: #e6e6e6;
-  align-self: flex-start;
-}
-
-.message.user {
-  background: #cce5ff;
-  align-self: flex-end;
-  margin-left: auto;
-  text-align: right;
-}
-
-.options {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.options button {
-  padding: 10px;
-  border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.options button:hover {
-  background: #0056b3;
-}
-</style>
