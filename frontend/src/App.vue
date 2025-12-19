@@ -3,12 +3,17 @@
 </script>
 
 <template>
-  <v-layout class="rounded rounded-md border" height="100%">
-    <NavigationDrawer />
-    <v-main class="d-flex align-center justify-center">
-      <v-container>
-        <router-view />
-      </v-container>
-    </v-main>
-  </v-layout>
+  <v-app>
+    <v-layout style="height: 100vh;">
+      <NavigationDrawer />
+
+      <!-- MUY IMPORTANTE: que el main NO scrollee -->
+      <v-main class="bg-blue-grey-lighten-5" style="overflow: hidden;">
+        <!-- router-view con slot para meter class al componente real -->
+        <router-view v-slot="{ Component }">
+          <component :is="Component" style="height: 100%;" />
+        </router-view>
+      </v-main>
+    </v-layout>
+  </v-app>
 </template>

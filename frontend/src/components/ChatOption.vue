@@ -1,5 +1,5 @@
 <template>
-    <v-btn variant="outlined" density="comfortable" class="text-subtitle-1" :text="text"/>
+    <v-btn variant="border" class="pa-2 text-subtitle-1 bg-grey-lighten-5 border-sm" :text="text"/>
 </template>
 
 <script setup>

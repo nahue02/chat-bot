@@ -1,23 +1,32 @@
 <template>
-    <div class="mb-4">
-      <div class="mb-2">
-        <v-avatar class="mr-2" :image=avatar></v-avatar>
-        <span class="font-weight-semibold">{{username}}</span>
-      </div>
+  <div class="d-flex mb-4 align-start">
+    <v-avatar
+      class="mr-3"
+      size="36"
+      :image="avatar"
+    />
+
+    <div class="flex-grow-1">
+      <span class="font-weight-semibold text-grey-darken-3">
+        {{ username }}
+      </span>
+
       <v-sheet
-          class="pa-4 rounded-be-lg rounded-te-lg rounded-bs-lg"
-          :color=messageColor
-          width="100%"
-        >
-        <p>
+        class="pa-4 mt-1 rounded-be-lg rounded-te-lg rounded-bs-lg"
+        :color="messageColor"
+        max-width="80%"
+      >
+        <p class="ma-0">
           {{ message }}
         </p>
       </v-sheet>
     </div>
+  </div>
 </template>
 
 <script setup>
     import { computed } from 'vue';
+    import botAvatar from '@/assets/bot-avatar.png';
 
     const props = defineProps({
         from: {
@@ -33,7 +42,7 @@
 
     const avatar = computed(() => {
         if (props.from === 'bot') {
-            return "https://randomuser.me/api/portraits/women/85.jpg";
+            return botAvatar;
         } else {
             return "https://randomuser.me/api/portraits/women/85.jpg";
         }
@@ -49,9 +58,9 @@
 
     const messageColor = computed(() => {
         if (props.from === 'bot') {
-            return "secondary";
+            return "blue-lighten-4";
         } else {
-            return "primary";
+            return "blue-darken-1";
         }
     });
 
