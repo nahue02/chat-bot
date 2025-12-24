@@ -7,11 +7,9 @@
     <v-layout style="height: 100vh;">
       <NavigationDrawer />
 
-      <!-- MUY IMPORTANTE: que el main NO scrollee -->
-      <v-main class="bg-blue-grey-lighten-5" style="overflow: hidden;">
-        <!-- router-view con slot para meter class al componente real -->
+      <v-main class="overflow-y-auto">
         <router-view v-slot="{ Component }">
-          <component :is="Component" style="height: 100%;" />
+          <component :is="Component"/>
         </router-view>
       </v-main>
     </v-layout>

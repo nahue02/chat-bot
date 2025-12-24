@@ -24,65 +24,48 @@
 </script>
 
 <template>
-  <div>
-    <h1>Panel de Administracion</h1>
-    <v-list>
-  <v-list-item
-    v-for="node in nodes"
-    :key="node.id"
-    class="mb-4"
-  >
-    <v-card class="w-100">
-      <v-card-title class="d-flex justify-space-between align-center">
-        <div>
-          <strong>{{ node.id }} - {{ node.title }}</strong>
-        </div>
+  <v-container fluid class="pa-0 fill-height overflow-auto">
+    <v-sheet class="border ma-auto mt-4 pa-4" rounded>
+      <h1>Panel de Administracion</h1>
+      <v-divider></v-divider>
+      <v-card v-for="node in nodes" :key="node.id" variant="tonal" class="mt-4">
+        <v-card-title class="d-flex justify-space-between align-center">
+          <span class="text-h5">{{ node.title }}</span>
 
-        <div>
-          <v-btn
-            size="small"
-            variant="text"
-            color="primary"
-            @click="editNode(node.id)"
-          >
-            Editar
-          </v-btn>
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props"></v-btn>
+            </template>
 
-          <v-btn
-            size="small"
-            variant="text"
-            color="error"
-            @click="deleteNode(node.id)"
-          >
-            Eliminar
-          </v-btn>
-        </div>
-      </v-card-title>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title @click="editNode(node.id)">Editar</v-list-item-title>
+                <v-list-item-title @click="deleteNode(node.id)">Eliminar</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-card-title>
+        <v-card-text>
+            <p class="mb-2">
+              {{ node.message }}
+            </p>
 
-      <v-card-text>
-        <p class="mb-2">
-          {{ node.message }}
-        </p>
-
-        <v-list density="compact">
-          <v-list-item
-            v-for="option in node.options"
-            :key="option.id"
-          >
-            • {{ option.text }}
-            <span class="text-grey">
-              (next: {{ option.next_node }})
-            </span>
-          </v-list-item>
-        </v-list>
-      </v-card-text>
-
-      <v-divider />
-
-      <v-card-actions>
-      </v-card-actions>
-    </v-card>
-  </v-list-item>
-</v-list>
-    </div>
+            <v-divider></v-divider>
+            
+            <span class="text-h6">Opciones</span>
+              <v-list>
+                <v-list-item
+                  v-for="option in node.options"
+                  :key="option.id"
+                >
+                  {{ option.text }}
+                  <span>
+                    (next: {{ option.next_node }})
+                  </span>
+             </v-list-item>
+           </v-list>
+         </v-card-text>
+      </v-card>
+    </v-sheet>
+  </v-container>
 </template>

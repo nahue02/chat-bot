@@ -7,7 +7,7 @@
     />
 
     <div class="flex-grow-1">
-      <span class="font-weight-semibold text-grey-darken-3">
+      <span class="font-weight-semibold">
         {{ username }}
       </span>
 
