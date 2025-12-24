@@ -1,15 +1,16 @@
 <template>
-  <div>
+  <div class="mt-3 mb-3">
     <h4>Chat History</h4>
-
+    <v-divider></v-divider>
     <v-timeline density="compact" >
       <v-timeline-item
         v-for="(node, index) in nodeHistory"
         :key="index"
-        dot-color="primary"
+        :dot-color="node.from === 'user' ?  '#dd8c95' : '#f4eac7'"
         size="x-small"
+        
       >
-        <div class="text-caption mb-1">
+        <div v-if="node.from ===user" class="text-caption mb-1">
           {{ node.title}}
         </div>
 

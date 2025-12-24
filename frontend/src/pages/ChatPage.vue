@@ -9,6 +9,7 @@ import TopBar from '@/components/TopBar.vue'
 const messages = ref([])
 const currentNode = ref(null)
 const nodeHistory = ref([])
+const title = "My Custom Chatbot"
 
 onMounted(async () => {
   const { data } = await api.get('chat/start')
@@ -20,20 +21,28 @@ const selectOption = async (option) => {
   messages.value.push({ from: 'bot', text: currentNode.value.message })
   messages.value.push({ from: 'user', text: option.text })
 
+  nodeHistory.value.push({
+    title: "Usuario eligió:",
+    message: option.text,
+    from: "user"
+  })
+
   const { data } = await api.post('chat/next', {
     selected_option: option.next_node
   })
 
   currentNode.value = data
+
   nodeHistory.value.push(data)
 }
+
 </script>
 
 <template>
   <v-container fluid class="pa-0 fill-height">
     <v-row class="ma-0 fill-height">
       <v-col cols="9" class="d-flex flex-column chat-col">
-        <top-bar/>
+        <top-bar :title=title />
         <v-sheet class="pa-4 flex-grow-1 border" rounded>
           <chat-message
             v-for="(msg, index) in messages"
@@ -52,8 +61,8 @@ const selectOption = async (option) => {
         </v-sheet>
       </v-col>
       <v-col cols="3" class="d-flex flex-column chat-col">
-        <v-sheet class="ps-4 flex-grow-1 border" rounded>
-          <chat-history class="mt-4" :node-history="nodeHistory" />
+        <v-sheet class="ps-3 pe-3 flex-grow-1 border" rounded>
+          <chat-history :node-history="nodeHistory" />
         </v-sheet>
       </v-col>
     </v-row>

@@ -35,6 +35,13 @@
             </v-list-item-title>
           </v-list-item>
         </v-list>
+
+      <!-- TODO() Dialog para editar imagen y nombre del bot y usuario. ademas de colores-->
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn density="compact" variant="plain" icon="mdi-pencil-circle" ></v-btn>
+        </div>
+      </template>
       </v-navigation-drawer>
 </template>
 
@@ -43,5 +50,5 @@
   import { ref } from 'vue'
   
   const drawer = ref(true)
-  const rail = ref(true)
+  const rail = ref(false)
 </script>

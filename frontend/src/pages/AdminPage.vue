@@ -2,10 +2,12 @@
   import { ref, onMounted } from 'vue'
   import api from '../services/api'
   import { useRouter } from 'vue-router'
-  import Dialog from '@/components/Dialog.vue'
+  import TopBar from '@/components/TopBar.vue'
 
   const router = useRouter()
   const nodes = ref([])
+  const title = "Message Flow"
+
 
   onMounted(async () => {
     const { data } = await api.get('nodes/all')
@@ -25,10 +27,9 @@
 
 <template>
   <v-container fluid class="pa-0 fill-height overflow-auto">
-    <v-sheet class="border ma-auto mt-4 pa-4" rounded>
-      <h1>Panel de Administracion</h1>
-      <v-divider></v-divider>
-      <v-card v-for="node in nodes" :key="node.id" variant="tonal" class="mt-4">
+    <top-bar :title=title />
+
+    <v-card v-for="node in nodes" :key="node.id" variant="tonal" class="mt-4 ma-auto block">
         <v-card-title class="d-flex justify-space-between align-center">
           <span class="text-h5">{{ node.title }}</span>
 
@@ -66,6 +67,5 @@
            </v-list>
          </v-card-text>
       </v-card>
-    </v-sheet>
   </v-container>
 </template>

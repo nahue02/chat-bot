@@ -58,9 +58,9 @@
 
     const messageColor = computed(() => {
         if (props.from === 'bot') {
-            return "blue-lighten-4";
+            return "#f4eac7";
         } else {
-            return "blue-darken-1";
+            return "#dd8c95";
         }
     });
 

@@ -20,8 +20,6 @@ createApp(App).use(router).use(vuetify).mount("#app");
 
 /* 
   Colores:
-  FAF3E1
-  F5E7C6
-  FF6D1F
-  222222
+  amarillo: f4eac7
+  rosado: dd8c95
 */
