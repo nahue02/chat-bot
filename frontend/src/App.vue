@@ -4,10 +4,10 @@
 
 <template>
   <v-app>
-    <v-layout style="height: 100vh;">
-      <NavigationDrawer />
+    <v-layout>
+      <NavigationDrawer/>
 
-      <v-main class="overflow-y-auto">
+      <v-main>
         <router-view v-slot="{ Component }">
           <component :is="Component"/>
         </router-view>

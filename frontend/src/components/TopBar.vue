@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar :elevation="0" class="border-b">
+    <v-app-bar :elevation="0" class="border-b position-fixed">
       <v-app-bar-title>{{ title }}</v-app-bar-title>
     </v-app-bar>
 </template>

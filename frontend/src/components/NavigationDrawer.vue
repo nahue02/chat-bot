@@ -1,5 +1,6 @@
 <template>
     <v-navigation-drawer
+        class="h-screen position-fixed"
         v-model="drawer"
         :rail="rail"
         permanent

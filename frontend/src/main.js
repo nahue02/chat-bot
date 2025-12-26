@@ -12,7 +12,23 @@ const vuetify = createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: "dark", // 'light' | 'dark' | 'system'
+    defaultTheme: "dark",
+    themes: {
+      dark: {
+        dark: true,
+        colors: {
+          primary: "#f4eac7",
+          secondary: "#dd8c95",
+        },
+      },
+      light: {
+        dark: false,
+        colors: {
+          primary: "#f4eac7",
+          secondary: "#dd8c95",
+        },
+      },
+    },
   },
 });
 

@@ -6,11 +6,11 @@
       <v-timeline-item
         v-for="(node, index) in nodeHistory"
         :key="index"
-        :dot-color="node.from === 'user' ?  '#dd8c95' : '#f4eac7'"
+        :dot-color="node.from === 'user' ?  'secondary' : 'primary'"
         size="x-small"
         
       >
-        <div v-if="node.from ===user" class="text-caption mb-1">
+        <div v-if="node.from === user" class="text-caption mb-1">
           {{ node.title}}
         </div>
 

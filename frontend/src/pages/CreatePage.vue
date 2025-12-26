@@ -45,8 +45,9 @@ onMounted(async () => {
   nuevoId.value = data.length + 1
 })
 </script>
+
 <template>
-  <v-container fluid class="pa-0 fill-height overflow-auto">
+  <v-container fluid class="pa-0 d-flex h-100">
     <top-bar :title="title" />
 
     <v-container class="py-6">
@@ -59,7 +60,7 @@ onMounted(async () => {
         {{ errors.title[0] }}
       </v-alert>
 
-      <v-card class="pa-6 rounded-lg elevation-2 border">
+      <v-card class="pa-6 rounded-lg elevation-2 border overflow-y-auto">
         <form @submit.prevent="submitForm">
 
           <v-text-field
@@ -105,24 +106,24 @@ onMounted(async () => {
               <v-text-field
                 v-model="option.text"
                 label="Texto"
-                class="flex-1"
+                class="flex-1 mr-4"
                 required
               />
-
+              
               <v-select
                 v-model="option.next_node"
                 :items="nodes"
                 item-title="title"
                 item-value="id"
                 label="Vincular a nodo"
-                class="flex-1"
+                class="flex-1 ml-2 mr-4"
                 required
               />
 
               <v-btn
                 color="red"
                 icon="mdi-delete"
-                variant="tonal"
+                variant="plain"
                 @click="removeOption(index)"
               />
             </div>
@@ -132,7 +133,6 @@ onMounted(async () => {
             type="submit"
             color="primary"
             prepend-icon="mdi-content-save"
-            block
           >
             Crear nodo
           </v-btn>
