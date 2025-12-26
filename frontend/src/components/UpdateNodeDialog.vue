@@ -30,7 +30,9 @@
               color="primary"
               prepend-icon="mdi-plus"
               @click="addOption"
-            >Agregar opción</v-btn>
+            >
+              Agregar opción
+            </v-btn>
           </div>
 
           <v-divider class="mb-4"></v-divider>
@@ -54,6 +56,7 @@
 
         <v-card-actions class="d-flex justify-end">
           <v-btn variant="text" @click="closeDialog">Cancelar</v-btn>
+          <v-btn @click="deleteNode" color="error" prepend-icon="mdi-alert">Eliminar</v-btn>
           <v-btn type="submit" color="primary" prepend-icon="mdi-content-save">Guardar</v-btn>
         </v-card-actions>
 
@@ -145,5 +148,10 @@ async function loadNode(id) {
       next_node: opt.next_node
     })) || []
   }
+}
+
+async function deleteNode() {
+  await api.delete('nodes/delete/' + props.nodeId)
+  router.go('/admin')
 }
 </script>

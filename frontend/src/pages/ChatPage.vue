@@ -1,3 +1,34 @@
+<template>
+  <v-container fluid class="pa-0 fill-height">
+    <v-row class="ma-0 fill-height">
+      <v-col cols="9" class="d-flex flex-column chat-col">
+        <top-bar :title=title />
+        <v-sheet class="pa-4 flex-grow-1 border" rounded>
+          <chat-message
+            v-for="(msg, index) in messages"
+            :key="index"
+            :message="msg.text"
+            :from="msg.from"
+          />
+          <div v-if="currentNode">
+            <chat-message :message="currentNode.message" from="bot" />
+            <v-row class="mt-2 ml-12" dense style="column-gap: 1rem;">
+              <v-col v-for="option in currentNode.options" :key="option.id" cols="auto" class="pa-0">
+                <chat-option @click="selectOption(option)" :text="option.text" />
+              </v-col>
+            </v-row>
+          </div>
+        </v-sheet>
+      </v-col>
+      <v-col cols="3" class="d-flex flex-column chat-col">
+        <v-sheet class="ps-3 pe-3 flex-grow-1 border" rounded>
+          <chat-history :node-history="nodeHistory" />
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue'
 import api from '../services/api'
@@ -37,34 +68,3 @@ const selectOption = async (option) => {
 }
 
 </script>
-
-<template>
-  <v-container fluid class="pa-0 fill-height">
-    <v-row class="ma-0 fill-height">
-      <v-col cols="9" class="d-flex flex-column chat-col">
-        <top-bar :title=title />
-        <v-sheet class="pa-4 flex-grow-1 border" rounded>
-          <chat-message
-            v-for="(msg, index) in messages"
-            :key="index"
-            :message="msg.text"
-            :from="msg.from"
-          />
-          <div v-if="currentNode">
-            <chat-message :message="currentNode.message" from="bot" />
-            <v-row class="mt-2 ml-12" dense style="column-gap: 1rem;">
-              <v-col v-for="option in currentNode.options" :key="option.id" cols="auto" class="pa-0">
-                <chat-option @click="selectOption(option)" :text="option.text" />
-              </v-col>
-            </v-row>
-          </div>
-        </v-sheet>
-      </v-col>
-      <v-col cols="3" class="d-flex flex-column chat-col">
-        <v-sheet class="ps-3 pe-3 flex-grow-1 border" rounded>
-          <chat-history :node-history="nodeHistory" />
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </v-container>
-</template>
