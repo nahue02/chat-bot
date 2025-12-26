@@ -18,7 +18,9 @@
               ></v-btn>
             </template>
           </v-list-item>
+          <v-divider></v-divider>
         </v-list>
+        
         <v-list density="compact" nav>
           <v-list-item prepend-icon="mdi-message" to="/">
             <v-list-item-title class="font-weight-semibold">
