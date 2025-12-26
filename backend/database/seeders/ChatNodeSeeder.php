@@ -4,53 +4,64 @@ namespace Database\Seeders;
 
 use App\Models\ChatNode;
 use App\Models\NodeOption;
+use App\Models\NodePosition;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ChatNodeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // 1. Inicio
+        //Nodos
+
         $inicio = ChatNode::create([
             'title' => 'Inicio',
             'message' =>
-                "Fui entrenado para poder resolver las dudas más frecuentes relacionadas con nuestra Dirección.
-                Por favor, elija una de las opciones de más abajo:"
+                "¡Hola! Soy Chatbot. Estoy acá para guiarte por el trabajo de Nahuel Palacio, desarrollador full-stack, y mostrarte sus proyectos de manera interactiva. Podés elegir por dónde empezar:"
         ]);
 
-        // 2. Retiros
-        $retiros = ChatNode::create([
-            'title' => 'Retiros',
-            'message' => 'Para retiros puedo ayudarlo con...'
+        $sobre_mi = ChatNode::create([
+            'title' => 'Sobre mi',
+            'message' => 'Tengo que usar el cerebro'
         ]);
 
-        // 3. Pensiones
-        $pensiones = ChatNode::create([
-            'title' => 'Pensiones',
-            'message' => 'Sobre Pensiones puedo ayudarlo con lo siguiente...'
+        $sobre_chatbot = ChatNode::create([
+            'title' => 'Sobre Chatbot',
+            'message' => 'Tengo que usar el cerebro otra vez'
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | OPCIONES
-        |--------------------------------------------------------------------------
-        */
+        // Opciones
 
-        // Inicio → Retiros / Pensiones
         NodeOption::create([
             'chat_node_id' => $inicio->id,
-            'text' => 'Retiros',
-            'next_node' => $retiros->id
+            'text' => 'Sobre mi',
+            'next_node' => $sobre_mi->id
         ]);
 
         NodeOption::create([
             'chat_node_id' => $inicio->id,
-            'text' => 'Pensiones',
-            'next_node' => $pensiones->id
+            'text' => 'Sobre Chatbot',
+            'next_node' => $sobre_chatbot->id
+        ]);
+
+        // Positions
+
+        NodePosition::create([
+            'chat_node_id' => $inicio->id,
+            'x' => 0,
+            'y' => 0
+        ]);
+
+        NodePosition::create([
+            'chat_node_id' => $sobre_mi->id,
+            'x' => -300,
+            'y' => 250
+        ]);
+
+        NodePosition::create([
+            'chat_node_id' => $sobre_chatbot->id,
+            'x' => 300,
+            'y' => 250
         ]);
     }
 }

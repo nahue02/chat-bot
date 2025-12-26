@@ -15,5 +15,9 @@ class ChatNode extends Model
         return $this->hasMany(NodeOption::class);
     }
 
+    public function positions(){
+        return $this->hasMany(NodePosition::class);
+    }
+
     protected $table = 'chat_node';
 }

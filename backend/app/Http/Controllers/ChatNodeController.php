@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\ChatNode;
 use App\Models\NodeOption;
-use Exception;
+use App\Models\NodePosition;
 use Illuminate\Http\Request;
+use Exception;
 
 class ChatNodeController extends Controller
 {
     public function index() {
-        return ChatNode::with('options')->get();
+        return ChatNode::with(['options', 'positions'])->get();
     }
 
     public function show($id) {
@@ -115,4 +116,19 @@ class ChatNodeController extends Controller
         $nextId = $request->selected_option;
         return ChatNode::with('options')->find($nextId);
     }
+
+    public function update_position($id, Request $request) {
+        $request->validate([
+            'x' => 'required|numeric',
+            'y' => 'required|numeric',
+        ]);
+
+        $position = NodePosition::updateOrCreate(
+            ['chat_node_id' => $id],
+            ['x' => $request-> x, 'y' => $request-> y]
+        );
+
+        return response()->json(['message' => 'Posición actualizada', 'data' => $position], 200);
+    }
+    
 }

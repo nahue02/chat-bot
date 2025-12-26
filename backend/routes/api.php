@@ -13,3 +13,5 @@ Route::get('/nodes/{id}', [ChatNodeController::class, 'show']);
 Route::post('/nodes/create', [ChatNodeController::class, 'store']);
 Route::put('/nodes/update/{id}', [ChatNodeController::class, 'update']);
 Route::delete('/nodes/delete/{id}', [ChatNodeController::class, 'destroy']);
+
+Route::post('nodes/update/position/{id}', [ChatNodeController::class, 'update_position']);

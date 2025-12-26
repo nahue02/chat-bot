@@ -91,10 +91,17 @@ const { findNode, setCenter } = useVueFlow()
 onMounted(async () => {
   const { data } = await api.get('nodes/all')
 
-  nodes.value = data.map((n, index) => ({
+  nodes.value = data.map((n) => ({
     id: String(n.id),
-    position: { x: 100, y: index * 200 },
-    data: n,
+    position: {
+      x: n.positions?.[0]?.x ?? 100,  // si no tiene posición, usar valor por defecto
+      y: n.positions?.[0]?.y ?? 100,
+    },
+    data: {
+      title: n.title,
+      message: n.message,
+      options: n.options || []
+    },
     type: 'custom'
   }))
 
