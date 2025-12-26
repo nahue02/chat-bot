@@ -86,7 +86,14 @@ const edges = ref([])
 const color = ref("indigo")
 const cardVariant = ref("flat")
 
-const { findNode, setCenter } = useVueFlow()
+const { findNode, setCenter, onNodeDragStop } = useVueFlow()
+
+onNodeDragStop(({ node }) => {
+  api.post('nodes/update/position/' + node.id, {
+    x: node.position.x,
+    y: node.position.y
+  })
+})
 
 onMounted(async () => {
   const { data } = await api.get('nodes/all')
@@ -94,7 +101,7 @@ onMounted(async () => {
   nodes.value = data.map((n) => ({
     id: String(n.id),
     position: {
-      x: n.positions?.[0]?.x ?? 100,  // si no tiene posición, usar valor por defecto
+      x: n.positions?.[0]?.x ?? 100,
       y: n.positions?.[0]?.y ?? 100,
     },
     data: {
