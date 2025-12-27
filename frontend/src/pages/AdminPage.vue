@@ -3,11 +3,11 @@
     <top-bar :title="title" />
     
     <VueFlow 
-    :nodes="nodes" 
-    :edges="edges"
+    v-model:nodes="mappedNodes" 
+    v-model:edges="edges"
     :default-edge-options="{ markerEnd: 'arrow' }"
     >
-      <template #node-custom="{ data }">
+      <template #node-custom="{ id, data }">
         <v-card
         :color="color"
         :variant="cardVariant"
@@ -18,7 +18,7 @@
             <div>
               <div class="d-flex justify-end mb-1">
                 <v-btn 
-                @click="openEdit(data.id)" 
+                @click=openEdit(id)
                 density="compact" 
                 variant="plain" 
                 icon="mdi-text-box-edit"
@@ -52,8 +52,9 @@
     </VueFlow>
     
     <UpdateNodeDialog
-    :nodeId="selectedId"
-    v-model="showEditDialog"
+      v-if="showEditDialog"
+      :nodeId="selectedId"
+      v-model="showEditDialog"
     />
   </v-container>
 </template>
@@ -61,16 +62,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../services/api'
-import { useRouter } from 'vue-router'
 import TopBar from '@/components/TopBar.vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css';
 import { Background } from '@vue-flow/background'
 import UpdateNodeDialog from '@/components/UpdateNodeDialog.vue'
+import { useNodes } from '@/stores/useNodes.js'
 
-const router = useRouter()
 const title = "Message Flow"
+const color = ref("indigo")
+const cardVariant = ref("flat")
 
 const showEditDialog = ref(false)
 const selectedId = ref(null)
@@ -80,49 +82,44 @@ const openEdit = (id) => {
   showEditDialog.value = true
 }
 
-const nodes = ref([])
-const edges = ref([])
+const { nodes, loadNodes, updateNodePosition } = useNodes()
 
-const color = ref("indigo")
-const cardVariant = ref("flat")
+const edges = ref([])
+const mappedNodes = ref([])
 
 const { findNode, setCenter, onNodeDragStop } = useVueFlow()
 
 onNodeDragStop(({ node }) => {
-  api.post('nodes/update/position/' + node.id, {
-    x: node.position.x,
-    y: node.position.y
-  })
+  updateNodePosition(node.id, node.position)
 })
 
 onMounted(async () => {
-  const { data } = await api.get('nodes/all')
+  await loadNodes(api)
 
-  nodes.value = data.map((n) => ({
-    id: String(n.id),
-    position: {
-      x: n.positions?.[0]?.x ?? 100,
-      y: n.positions?.[0]?.y ?? 100,
+  mappedNodes.value = nodes.value.map(node => ({
+    id: String(node.id),
+    data: { 
+      title: node.title,
+      message: node.message,
+      options: node.options
     },
-    data: {
-      title: n.title,
-      message: n.message,
-      options: n.options || []
-    },
-    type: 'custom'
+    type: 'custom',
+    position: node.position
+    ? node.position
+    : node.positions?.length
+      ? { x: node.positions[0].x, y: node.positions[0].y }
+      : { x: 100, y: 100 },
   }))
 
-  edges.value = data.flatMap(n =>
-    (n.options || [])
-      .filter(opt => opt.next_node)
-      .map(opt => ({
-        id: `e${n.id}-${opt.next_node}`,
-        source: String(n.id),
-        target: String(opt.next_node),
-        animated: true
-      }))
+  edges.value = mappedNodes.value.flatMap(n =>
+    (n.data?.options || []).map(opt => ({
+      id: `e${n.id}-${opt.next_node}`,
+      source: String(n.id),
+      target: String(opt.next_node)
+    }))
   )
 })
+
 
 function goToNode(targetId) {
   const node = findNode(String(targetId))
@@ -130,7 +127,4 @@ function goToNode(targetId) {
 
   setCenter(node.position.x + 200, node.position.y + 180, { zoom: 1 })
 }
-
-const editNode = (id) => router.push('/edit/' + id)
-const deleteNode = async (id) => await api.delete('nodes/delete/' + id)
 </script>

@@ -56,7 +56,7 @@
 
         <v-card-actions class="d-flex justify-end">
           <v-btn variant="text" @click="closeDialog">Cancelar</v-btn>
-          <v-btn @click="deleteNode" color="error" prepend-icon="mdi-alert">Eliminar</v-btn>
+          <v-btn @click="destroy" color="error" prepend-icon="mdi-alert">Eliminar</v-btn>
           <v-btn type="submit" color="primary" prepend-icon="mdi-content-save">Guardar</v-btn>
         </v-card-actions>
 
@@ -68,34 +68,18 @@
 import { ref, watch, onMounted } from 'vue'
 import api from '../services/api'
 import { useRouter } from 'vue-router'
-
-const title = "Edit Node"
+import { useNodes } from '@/stores/useNodes.js'
 
 const props = defineProps({
   nodeId: String,
   modelValue: Boolean
 })
 
+const title = "Edit Node"
+
 const emit = defineEmits(['update:modelValue'])
-
 const router = useRouter()
-const localModel = ref(props.modelValue)
-
-watch(() => props.modelValue, val => localModel.value = val)
-watch(localModel, val => emit('update:modelValue', val))
-watch(
-  () => props.nodeId,
-  async (newId) => {
-    if (!newId) return
-    await loadNode(newId)
-  },
-  { immediate: true }
-)
-
-const closeDialog = () => {
-  form.value = { title: '', message: '', options: [] }
-  localModel.value = false
-}
+const { nodes, loadNodes, loadNode, updateNode, deleteNode } = useNodes();
 
 const form = ref({
   title: '',
@@ -103,8 +87,24 @@ const form = ref({
   options: []
 })
 
-const nodes = ref([])
-const errors = ref([])
+onMounted(async () => {
+  await loadNodes(api)
+
+  if (props.nodeId) {
+    console.log("Cargando nodo:", props.nodeId)
+    const data = await loadNode(props.nodeId)
+    if (data) loadForm(data)
+  }
+})
+
+const localModel = ref(props.modelValue)
+
+watch(() => props.modelValue, val => localModel.value = val)
+watch(localModel, val => emit('update:modelValue', val))
+
+const closeDialog = () => {
+  localModel.value = false
+}
 
 const addOption = () => {
   form.value.options.push({
@@ -119,26 +119,11 @@ const removeOption = (index) => {
 }
 
 const submitForm = async () => {
-  try {
-    await api.put(`/nodes/update/${props.nodeId}`, form.value)
-    closeDialog()
-    router.go('/admin')
-  } catch (error) {
-    errors.value = error.response.data.errors
-  }
+  updateNode(props.nodeId, form.value)
+  closeDialog()
 }
 
-onMounted(async () => {
-  const allNodes = await api.get('/nodes/all')
-  nodes.value = allNodes.data
-
-  loadNode(props.nodeId)
-})
-
-async function loadNode(id) {
-  const res = await api.get(`/nodes/${id}`)
-  const data = res.data
-
+async function loadForm(data) {
   form.value = {
     title: data.title,
     message: data.message,
@@ -150,8 +135,8 @@ async function loadNode(id) {
   }
 }
 
-async function deleteNode() {
-  await api.delete('nodes/delete/' + props.nodeId)
+async function destroy() {
+  deleteNode(props.nodeId)
   router.go('/admin')
 }
 </script>

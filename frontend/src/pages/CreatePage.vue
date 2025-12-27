@@ -96,13 +96,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import api from '../services/api'
+import { useNodes } from '@/stores/useNodes.js'
 import { useRouter } from 'vue-router'
 import TopBar from '@/components/TopBar.vue'
 
 const router = useRouter()
-const errors = ref([])
 const title = "Create a new node"
+const errors = ref([])
+
+const { nodes, loadNodes, createNode } = useNodes()
 
 const form = ref({
   title: '',
@@ -122,22 +124,12 @@ const removeOption = (index) => {
   form.value.options.splice(index, 1)
 }
 
-const submitForm = async () => {
-  try {
-    await api.post('/nodes/create', form.value)
-    router.push('/admin')
-  } catch (error) {
-    errors.value = error.response.data.errors
-  }
-  
+const submitForm = () => {
+  createNode(form.value)
+  router.push('/admin')
 }
 
-const nodes = ref([])
-const nuevoId = ref([])
-
-onMounted(async () => {
-  const { data } = await api.get('nodes/all')
-  nodes.value = data
-  nuevoId.value = data.length + 1
+onMounted(() => {
+  loadNodes()
 })
 </script>
