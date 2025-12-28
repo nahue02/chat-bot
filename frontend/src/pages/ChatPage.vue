@@ -36,16 +36,37 @@ import ChatMessage from '@/components/ChatMessage.vue'
 import ChatOption from '@/components/ChatOption.vue'
 import ChatHistory from '@/components/ChatHistory.vue'
 import TopBar from '@/components/TopBar.vue'
+import { useNodes } from '@/stores/useNodes.js' 
+import { chatState } from '@/stores/chatState'
+
+const { loadNodes, loadNode } = useNodes()
+const { saveChatState, saveCurrentNode, saveMessageFlow, getChatState, getCurrentNode, getMessageFlow, } = chatState();
 
 const messages = ref([])
 const currentNode = ref(null)
 const nodeHistory = ref([])
+
 const title = "My Custom Chatbot"
 
 onMounted(async () => {
-  const { data } = await api.get('chat/start')
-  currentNode.value = data
-  nodeHistory.value.push(data)
+  const chatState = await getChatState()
+  if ( chatState.length === 0 ) {
+    console.log("hola")
+    await loadNodes(api)
+    currentNode.value = await loadNode(1)
+    nodeHistory.value.push({
+      title: "Inicio",
+      message: currentNode.value.message,
+      from: "bot"
+    })
+
+    saveCurrentNode(currentNode.value)
+    saveMessageFlow(nodeHistory.value)
+  } else {
+    messages.value = await getChatState()
+    currentNode.value = await getCurrentNode()
+    nodeHistory.value = await getMessageFlow()
+  }
 })
 
 const selectOption = async (option) => {
@@ -53,18 +74,18 @@ const selectOption = async (option) => {
   messages.value.push({ from: 'user', text: option.text })
 
   nodeHistory.value.push({
-    title: "Usuario eligió:",
     message: option.text,
     from: "user"
   })
 
-  const { data } = await api.post('chat/next', {
-    selected_option: option.next_node
-  })
+  currentNode.value = await loadNode(option.next_node)
+  nodeHistory.value.push(currentNode.value)
 
-  currentNode.value = data
-
-  nodeHistory.value.push(data)
+  saveChatState(messages.value)
+  saveCurrentNode(currentNode.value)
+  saveMessageFlow(nodeHistory.value)
 }
 
 </script>
+
+

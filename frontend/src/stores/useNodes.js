@@ -1,7 +1,9 @@
 import { ref } from "vue";
+import { chatState } from "./chatState";
 
 const nodes = ref([]);
 const sessionKey = "local";
+const { clearAllData } = chatState();
 
 export function useNodes() {
   const createNode = (form) => {
@@ -21,6 +23,8 @@ export function useNodes() {
 
     local.push(newNode);
     nodes.value = local;
+
+    clearAllData();
     sessionStorage.setItem(sessionKey, JSON.stringify(nodes.value));
   };
 
@@ -55,6 +59,7 @@ export function useNodes() {
       next_node: Number(opt.next_node),
     }));
 
+    clearAllData();
     sessionStorage.setItem(sessionKey, JSON.stringify(nodes.value));
   };
 
@@ -67,11 +72,12 @@ export function useNodes() {
     nodes.value = nodes.value.filter((n) => String(n.id) !== String(id));
 
     nodes.value.forEach((n) => {
-      n.data.options = n.data.options.filter(
+      n.options = n.options.filter(
         (opt) => String(opt.next_node) !== String(id)
       );
     });
 
+    clearAllData();
     sessionStorage.setItem(sessionKey, JSON.stringify(nodes.value));
   };
 

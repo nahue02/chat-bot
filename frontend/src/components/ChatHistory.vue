@@ -8,9 +8,8 @@
         :key="index"
         :dot-color="node.from === 'user' ?  'secondary' : 'primary'"
         size="x-small"
-        
       >
-        <div v-if="node.from === user" class="text-caption mb-1">
+        <div v-if="node.from === bot" class="text-caption mb-1">
           {{ node.title}}
         </div>
 
