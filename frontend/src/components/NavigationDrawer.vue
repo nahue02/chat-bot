@@ -42,7 +42,7 @@
       <!-- TODO() Dialog para editar imagen y nombre del bot y usuario. ademas de colores-->
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn density="compact" variant="plain" icon="mdi-pencil-circle" ></v-btn>
+          <v-btn @click="reload" density="compact" variant="plain" icon="mdi-restart" ></v-btn>
         </div>
       </template>
       </v-navigation-drawer>
@@ -51,7 +51,19 @@
 <script setup>
   import botAvatar from '@/assets/bot-avatar.png';
   import { ref } from 'vue'
+  import { chatState } from '@/stores/chatState'
+  import { useNodes } from '@/stores/useNodes';
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
   
   const drawer = ref(true)
   const rail = ref(true)
+
+  function reload() {
+    const { clearAll } = useNodes()
+
+    clearAll()
+    router.go('/')
+  }
 </script>

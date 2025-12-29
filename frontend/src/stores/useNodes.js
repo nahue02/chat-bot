@@ -91,6 +91,10 @@ export function useNodes() {
     sessionStorage.setItem(sessionKey, JSON.stringify(nodes.value));
   };
 
+  const clearAll = () => {
+    sessionStorage.clear();
+  };
+
   return {
     nodes,
     createNode,
@@ -99,5 +103,6 @@ export function useNodes() {
     updateNode,
     deleteNode,
     updateNodePosition,
+    clearAll,
   };
 }
