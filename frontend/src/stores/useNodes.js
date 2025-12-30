@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { supabase } from "@/lib/supabaseClient";
 import { chatState } from "./chatState";
 
 const nodes = ref([]);
@@ -14,11 +15,13 @@ export function useNodes() {
       id: newId,
       title: form.title || "Node " + newId,
       message: form.message,
-      options: form.options.map((opt) => ({
-        _id: opt._id ?? crypto.randomUUID(),
-        text: opt.text,
-        next_node: Number(opt.next_node),
-      })),
+      node_options:
+        form.options.map((opt) => ({
+          _id: opt._id ?? crypto.randomUUID(),
+          text: opt.text,
+          next_node: Number(opt.next_node),
+        })) || [],
+      node_positions: [{ x: 100, y: 100 }],
     };
 
     local.push(newNode);
@@ -34,9 +37,28 @@ export function useNodes() {
     if (local) {
       nodes.value = local;
     } else {
-      const { data } = await api.get("/nodes/all");
-      nodes.value = data;
-      sessionStorage.setItem(sessionKey, JSON.stringify(data));
+      const { data, error } = await supabase.from("chat_node").select(`
+        *,
+        node_options(*),
+        node_positions(*)
+      `);
+
+      data.map((node) => {
+        console.log(node);
+        const newNode = {
+          id: node.id,
+          title: node.title,
+          message: node.message,
+          node_options: node.node_options || [],
+          node_positions: node.node_positions || [{ x: 100, y: 100 }],
+        };
+
+        console.log(newNode);
+        nodes.value.push(newNode);
+      });
+
+      console.log(nodes.value);
+      sessionStorage.setItem(sessionKey, JSON.stringify(nodes.value));
     }
   };
 
@@ -53,7 +75,7 @@ export function useNodes() {
 
     nodes.value[index].title = form.title || "Node " + nodes.value[index].id;
     nodes.value[index].message = form.message;
-    nodes.value[index].options = form.options.map((opt) => ({
+    nodes.value[index].node_options = form.options.map((opt) => ({
       _id: opt._id ?? crypto.randomUUID(),
       text: opt.text,
       next_node: Number(opt.next_node),
@@ -85,8 +107,9 @@ export function useNodes() {
     const index = nodes.value.findIndex((n) => String(n.id) === String(id));
     if (index === -1) return;
 
-    nodes.value[index].position = position;
-    console.log(nodes.value[index].position.length);
+    console.log("before: ", nodes.value[index].node_positions[0]);
+    nodes.value[index].node_positions[0] = position;
+    console.log("after: ", nodes.value[index].node_positions[0]);
 
     sessionStorage.setItem(sessionKey, JSON.stringify(nodes.value));
   };

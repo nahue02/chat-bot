@@ -101,14 +101,15 @@ onMounted(async () => {
     data: { 
       title: node.title,
       message: node.message,
-      options: node.options
+      options: node.node_options
     },
     type: 'custom',
-    position: node.position
-    ? node.position
-    : node.positions?.length
-      ? { x: node.positions[0].x, y: node.positions[0].y }
-      : { x: 100, y: 100 },
+    position: node.node_positions?.length > 0
+  ? {
+      x: Number(node.node_positions[0].x) || 100,
+      y: Number(node.node_positions[0].y) || 100
+    }
+  : { x: 100, y: 100 },
   }))
 
   edges.value = mappedNodes.value.flatMap(n =>
@@ -124,7 +125,7 @@ onMounted(async () => {
 function goToNode(targetId) {
   const node = findNode(String(targetId))
   if (!node) return
-
+  console.log(node.position)
   setCenter(node.position.x + 200, node.position.y + 180, { zoom: 1 })
 }
 </script>

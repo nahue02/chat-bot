@@ -91,8 +91,8 @@ onMounted(async () => {
   await loadNodes(api)
 
   if (props.nodeId) {
-    console.log("Cargando nodo:", props.nodeId)
     const data = await loadNode(props.nodeId)
+    console.log(data)
     if (data) loadForm(data)
   }
 })
@@ -127,7 +127,7 @@ async function loadForm(data) {
   form.value = {
     title: data.title,
     message: data.message,
-    options: data.options?.map(opt => ({
+    options: data.node_options?.map(opt => ({
       _id: crypto.randomUUID(),
       text: opt.text,
       next_node: opt.next_node

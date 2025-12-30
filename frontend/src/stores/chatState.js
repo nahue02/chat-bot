@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 const localMessages = ref([]);
 const localCurrentNode = ref(null);

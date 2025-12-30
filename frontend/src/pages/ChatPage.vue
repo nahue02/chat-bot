@@ -13,7 +13,7 @@
           <div v-if="currentNode">
             <chat-message :message="currentNode.message" from="bot" />
             <v-row class="mt-2 ml-12" dense style="column-gap: 1rem;">
-              <v-col v-for="option in currentNode.options" :key="option.id" cols="auto" class="pa-0">
+              <v-col v-for="option in currentNode.node_options" :key="option.id" cols="auto" class="pa-0">
                 <chat-option @click="selectOption(option)" :text="option.text" />
               </v-col>
             </v-row>
@@ -51,7 +51,6 @@ const title = "My Custom Chatbot"
 onMounted(async () => {
   const chatState = await getChatState()
   if ( chatState.length === 0 ) {
-    console.log("hola")
     await loadNodes(api)
     currentNode.value = await loadNode(1)
     nodeHistory.value.push({
