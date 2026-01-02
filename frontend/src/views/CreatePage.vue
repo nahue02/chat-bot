@@ -96,7 +96,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useNodes } from '@/stores/useNodes.js'
+import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
 import { useRouter } from 'vue-router'
 import TopBar from '@/components/TopBar.vue'
 
@@ -104,7 +104,7 @@ const router = useRouter()
 const title = "Create a new node"
 const errors = ref([])
 
-const { nodes, loadNodes, createNode } = useNodes()
+const { nodes, loadNodes, createNode } = nodesSessionManager()
 
 const form = ref({
   title: '',

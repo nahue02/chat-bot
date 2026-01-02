@@ -1,11 +1,13 @@
 <template>
   <v-container fluid class="pa-0 fill-height overflow-auto">
-    <top-bar :title="title" />
     
     <VueFlow 
     v-model:nodes="mappedNodes" 
     v-model:edges="edges"
-    :default-edge-options="{ markerEnd: 'arrow' }"
+    :default-edge-options="{ 
+      type: 'smoothstep',
+      markerEnd: 'arrow', animated: true
+    }"
     >
       <template #node-custom="{ id, data }">
         <v-card
@@ -61,17 +63,16 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import api from '../services/api'
 import TopBar from '@/components/TopBar.vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css';
 import { Background } from '@vue-flow/background'
 import UpdateNodeDialog from '@/components/UpdateNodeDialog.vue'
-import { useNodes } from '@/stores/useNodes.js'
+import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
 
 const title = "Message Flow"
-const color = ref("indigo")
+const color = ref("primary")
 const cardVariant = ref("flat")
 
 const showEditDialog = ref(false)
@@ -82,7 +83,7 @@ const openEdit = (id) => {
   showEditDialog.value = true
 }
 
-const { nodes, loadNodes, updateNodePosition } = useNodes()
+const { nodes, loadNodes, updateNodePosition } = nodesSessionManager()
 
 const edges = ref([])
 const mappedNodes = ref([])
@@ -94,7 +95,7 @@ onNodeDragStop(({ node }) => {
 })
 
 onMounted(async () => {
-  await loadNodes(api)
+  await loadNodes()
 
   mappedNodes.value = nodes.value.map(node => ({
     id: String(node.id),
@@ -112,12 +113,24 @@ onMounted(async () => {
   : { x: 100, y: 100 },
   }))
 
-  edges.value = mappedNodes.value.flatMap(n =>
-    (n.data?.options || []).map(opt => ({
-      id: `e${n.id}-${opt.next_node}`,
-      source: String(n.id),
-      target: String(opt.next_node)
-    }))
+  edges.value = mappedNodes.value.flatMap(sourceNode =>
+    (sourceNode.data?.options || []).map(opt => {
+      const targetNode = mappedNodes.value.find(
+        n => String(n.id) === String(opt.next_node)
+      )
+    
+      const isBackward =
+        targetNode &&
+        targetNode.position.y < sourceNode.position.y
+    
+      return {
+        id: `e${sourceNode.id}-${opt.next_node}`,
+        source: String(sourceNode.id),
+        target: String(opt.next_node),
+        type: 'smoothstep',
+        class: isBackward ? 'edge-backward' : 'edge-forward'
+      }
+    })
   )
 })
 
@@ -129,3 +142,10 @@ function goToNode(targetId) {
   setCenter(node.position.x + 200, node.position.y + 180, { zoom: 1 })
 }
 </script>
+
+<style>
+  .edge-backward {
+    opacity: 0.15;
+    stroke-dasharray: 4;
+  }
+</style>

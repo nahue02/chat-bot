@@ -66,9 +66,8 @@
 </template>
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import api from '../services/api'
 import { useRouter } from 'vue-router'
-import { useNodes } from '@/stores/useNodes.js'
+import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
 
 const props = defineProps({
   nodeId: String,
@@ -79,7 +78,7 @@ const title = "Edit Node"
 
 const emit = defineEmits(['update:modelValue'])
 const router = useRouter()
-const { nodes, loadNodes, loadNode, updateNode, deleteNode } = useNodes();
+const { nodes, loadNodes, loadNode, updateNode, deleteNode } = nodesSessionManager();
 
 const form = ref({
   title: '',
@@ -88,7 +87,7 @@ const form = ref({
 })
 
 onMounted(async () => {
-  await loadNodes(api)
+  await loadNodes()
 
   if (props.nodeId) {
     const data = await loadNode(props.nodeId)

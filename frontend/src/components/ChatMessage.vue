@@ -1,32 +1,40 @@
 <template>
-  <div class="d-flex mb-4 align-start">
+  <div
+    class="d-flex mb-4"
+    :class="props.from === 'bot' ? 'justify-start' : 'justify-end'"
+  >
     <v-avatar
+      v-if="props.from === 'bot'"
       class="mr-3"
       size="36"
       :image="avatar"
     />
 
-    <div class="flex-grow-1">
-      <span class="font-weight-semibold">
-        {{ username }}
-      </span>
-
-      <v-sheet
-        class="pa-4 mt-1 rounded-be-lg rounded-te-lg rounded-bs-lg"
-        :color="messageColor"
-        max-width="80%"
-      >
-        <p class="ma-0">
-          {{ message }}
-        </p>
-      </v-sheet>
-    </div>
+    <v-sheet
+      v-if="props.from === 'bot'"
+      class="ps-4 pe-4"
+      :class="bubbleClass"
+      :color="props.from === 'bot' ? '#09090b' : 'primary'"
+      max-width="90%"
+    >
+      <div class="ma-0" v-html="formatMessage(message)"></div>
+    </v-sheet>
+    <v-sheet
+      v-else
+      class="ps-4 pe-4 pa-2 mt-8 mb-8"
+      :class="bubbleClass"
+      :color="props.from === 'bot' ? '#09090b' : 'primary'"
+      max-width="90%"
+    >
+      <div class="ma-0" v-html="formatMessage(message)"></div>
+    </v-sheet>
   </div>
 </template>
 
 <script setup>
     import { computed } from 'vue';
-    import botAvatar from '@/assets/bot-avatar.png';
+    import botAvatar from '@/assets/bot-avatar-3.jpg';
+    import userAvatar from '@/assets/bot-avatar.png'
 
     const props = defineProps({
         from: {
@@ -40,29 +48,26 @@
         }
     });
 
+  const bubbleClass = computed(() => {
+    return props.from === 'bot'
+      ? 'rounded-s-sm rounded-e-xl'
+      : 'rounded-e-lg rounded-s-xl';
+  });
+
     const avatar = computed(() => {
         if (props.from === 'bot') {
             return botAvatar;
         } else {
-            return "https://randomuser.me/api/portraits/women/85.jpg";
+            return userAvatar;
         }
     });
 
-    const username = computed(() => {
-        if (props.from === 'bot') {
-            return "ChatBot";
-        } else {
-            return "Username";
-        }
-    });
+    const formatMessage = (message) => {
+      if (!message) return '';
 
-    const messageColor = computed(() => {
-        if (props.from === 'bot') {
-            return "primary";
-        } else {
-            return "secondary";
-        }
-    });
+      let formatted = message.replace(/\n/g, '<br>');
+      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-
+      return formatted;
+    }
 </script>

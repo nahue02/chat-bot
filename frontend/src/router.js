@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ChatPage from "./pages/ChatPage.vue";
-import AdminPage from "./pages/AdminPage.vue";
-import CreatePage from "./pages/CreatePage.vue";
+import ChatPage from "./views/ChatPage.vue";
+import AdminPage from "./views/AdminPage.vue";
+import CreatePage from "./views/CreatePage.vue";
 import UpdatePage from "./components/UpdateNodeDialog.vue";
 
 const routes = [

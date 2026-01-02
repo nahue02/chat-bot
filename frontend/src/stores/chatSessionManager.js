@@ -5,11 +5,11 @@ const localMessages = ref([]);
 const localCurrentNode = ref(null);
 const localMessageFlow = ref([]);
 
-const CHAT_STATE_KEY = "chatStatusKey";
-const CURRENT_NODE_KEY = "currentNodeKey";
-const MESSAGE_FLOW_KEY = "messageFlowKey";
+const CHAT_STATE_KEY = "chat_state";
+const CURRENT_NODE_KEY = "current_node";
+const MESSAGE_FLOW_KEY = "message_flow";
 
-export function chatState() {
+export function chatSessionManager() {
   const saveChatState = (msgs) => {
     localMessages.value = msgs;
     sessionStorage.setItem(CHAT_STATE_KEY, JSON.stringify(localMessages.value));
@@ -46,7 +46,7 @@ export function chatState() {
     return local;
   };
 
-  const clearAllData = () => {
+  const clearChatSessionData = () => {
     localMessages.value = [];
     localCurrentNode.value = null;
     localMessageFlow.value = [];
@@ -69,6 +69,6 @@ export function chatState() {
     getChatState,
     getCurrentNode,
     getMessageFlow,
-    clearAllData,
+    clearAllData: clearChatSessionData,
   };
 }

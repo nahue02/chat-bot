@@ -1,5 +1,5 @@
 <template>
-    <v-btn variant="border" class="pa-2 text-subtitle-1 border-sm" :text="text"/>
+    <v-btn variant="plain" class="pa-2 text-subtitle-1 option-button border" :text="text"/>
 </template>
 
 <script setup>
@@ -10,3 +10,10 @@
         }
     });
 </script>
+
+<style>
+    .option-button:hover {
+        background-color: #FF1744;
+        color:white;
+    }
+</style>
