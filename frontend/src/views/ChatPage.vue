@@ -13,11 +13,11 @@
                 :message="msg.text"
                 :from="msg.from"
               />
-              <div v-if="currentNode" class="mb-4">
-                <chat-message :message="currentNode.message" from="bot" />
+              <div v-if="currentNode" class="mb-10">
+                <chat-message :message="currentNode.message" from="bot" class="slide-up"/>
                 <v-row class="mt-4 ml-16" dense style="column-gap: 1rem;">
                   <v-col v-for="option in currentNode.node_options" :key="option.id" cols="auto" class="pa-0">
-                    <chat-option @click="selectOption(option)" :text="option.text" />
+                    <chat-option class="slide-up" @click="selectOption(option)" :text="option.text" />
                   </v-col>
                 </v-row>
               </div>
@@ -27,7 +27,7 @@
       </v-col>
       <v-col cols="3" class="d-flex flex-column h-100 border-s">
         <v-sheet class="flex-grow-1 overflow-y-auto" color="transparent">
-          <chat-history :node-history="nodeHistory" />
+          <chat-history :node-history="nodeHistory" class="slide-up" />
         </v-sheet>
       </v-col>
     </v-row>
@@ -72,7 +72,7 @@ onMounted(async () => {
   if ( chatState.length === 0 ) {
     await loadNodes()
     currentNode.value = await loadNode(1)
-    
+
     nodeHistory.value.push({
       title: "Inicio",
       message: currentNode.value.message,
@@ -117,3 +117,20 @@ const selectOption = async (option) => {
 }
 
 </script>
+
+<style>
+.slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>

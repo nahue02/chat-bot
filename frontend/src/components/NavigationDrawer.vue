@@ -11,6 +11,9 @@
           <v-list-item
             :prepend-avatar=botAvatar
           >
+            <div class="font-weight-regular">
+              Yumibot
+            </div>
           <!--
           <template v-slot:append>
             
@@ -27,19 +30,13 @@
         </v-list>
         
         <v-list density="compact" nav>
-          <v-list-item prepend-icon="mdi-message" to="/">
-            <v-list-item-title class="font-weight-semibold">
-              Chatbot
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-sitemap" to="/admin">
-            <v-list-item-title class="font-weight-semibold">
-              Admin Panel
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-plus-box" to="/create">
-            <v-list-item-title class="font-weight-semibold">
-              Create Message
+          <v-list-item v-for="item in routesList"  :key="item.id"
+            :prepend-icon=item.icon 
+            :to=item.route
+            class="rounded-lg"
+          > 
+            <v-list-item-title class="font-weight-regular">
+              {{ item.title }}
             </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -65,6 +62,27 @@
   
   const drawer = ref(true)
   const rail = ref(true)
+
+  const routesList = ref([
+    {
+      id: 1,
+      title: "Chat",
+      icon: "mdi-message-badge-outline",
+      route: "/"
+    },
+    {
+      id: 2,
+      title: "Flowchart",
+      icon: "mdi-sitemap-outline",
+      route: "/admin"
+    },
+    {
+      id: 3,
+      title: "Create",
+      icon: "mdi-message-plus-outline",
+      route: "/create"
+    },
+  ])
 
   function reload() {
     const { clearAll } = nodesSessionManager()

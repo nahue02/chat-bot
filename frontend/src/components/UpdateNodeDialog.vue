@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="localModel" max-width="800">
-    <v-card class="pa-6 rounded-lg elevation-2 border overflow-y-auto " style="max-height: 90vh;">
+    <v-card class="pa-6 rounded-xl elevation-2 border overflow-y-auto " style="max-height: 90vh;">
       <div class="mb-4">
         {{ title }}
       </div>
@@ -22,17 +22,15 @@
           required
         />
 
-        <v-card class="pa-4 mb-6 border" rounded="lg">
+        <v-card class="pa-4 mb-6 border rounded-lg">
           <div class="d-flex justify-space-between align-center mb-2">
             <h3 class="text-subtitle-1 font-weight-medium">Opciones</h3>
             <v-btn
-              size="small"
-              color="primary"
+              size="medium"
               prepend-icon="mdi-plus"
+              class="elevation-0 pa-2"
               @click="addOption"
-            >
-              Agregar opción
-            </v-btn>
+            ></v-btn>
           </div>
 
           <v-divider class="mb-4"></v-divider>

@@ -1,7 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 d-flex h-100">
-    <top-bar :title="title" />
-
+  <v-container fluid class="pa-0 d-flex h-100" >
     <v-container class="py-6">
       <v-alert
         v-if="errors.title"
@@ -12,7 +10,7 @@
         {{ errors.title[0] }}
       </v-alert>
 
-      <v-card class="pa-6 rounded-lg elevation-2 border overflow-y-auto">
+      <v-card class="pa-6 rounded-lg elevation-0 overflow-y-auto fill-height" color="transparent">
         <form @submit.prevent="submitForm">
 
           <v-text-field
@@ -35,15 +33,16 @@
           <v-card
             class="pa-4 mb-6 border"
             rounded="lg"
+            color="transparent"
           >
             <div class="d-flex justify-space-between align-center mb-2">
               <h3 class="text-subtitle-1 font-weight-medium">Opciones</h3>
               <v-btn
-                size="small"
-                color="primary"
+                size="medium"
                 prepend-icon="mdi-plus"
+                class="elevation-0 pa-2"
                 @click="addOption"
-              >Agregar opción</v-btn>
+              ></v-btn>
             </div>
 
             <v-divider class="mb-4"></v-divider>
