@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 d-flex h-100 " >
+  <v-container class="d-flex h-100 " >
     <v-container class="py-6">
       <v-alert
         v-if="errors.title"
@@ -97,7 +97,6 @@
 import { ref, onMounted } from 'vue'
 import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
 import { useRouter } from 'vue-router'
-import TopBar from '@/components/TopBar.vue'
 
 const router = useRouter()
 const title = "Create a new node"

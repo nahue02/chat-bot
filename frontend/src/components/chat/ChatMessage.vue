@@ -17,7 +17,7 @@
       color="#121212"
       max-width="90%"
     >
-      <div class="ma-0" v-html="formatMessage(message)"></div>
+      <div class="ma-0" v-html="format(message)"></div>
     </v-sheet>
     <v-sheet
       v-else
@@ -26,27 +26,31 @@
       color=primary
       max-width="90%"
     >
-      <div class="ma-0" v-html="formatMessage(message)"></div>
+      <div class="ma-0" v-html="format(message)"></div>
     </v-sheet>
   </div>
 </template>
 
 <script setup>
-    import { computed } from 'vue';
-    import botAvatar from '@/assets/bot-avatar-3.jpg';
-    import userAvatar from '@/assets/bot-avatar.png'
+  import { computed } from 'vue';
+  import botAvatar from '@/assets/bot-avatar-3.jpg';
+  import userAvatar from '@/assets/bot-avatar.png'
+  import { formatText } from '@/scripts/formatText'
 
-    const props = defineProps({
-        from: {
-            type: String,
-            required: false,
-            default: 'bot'
-        },
-        message: {
-            type: String,
-            required: true
-        }
-    });
+  const format = formatText()
+
+  const props = defineProps({
+      from: {
+          type: String,
+          required: false,
+          default: 'bot'
+      },
+      message: {
+          type: String,
+          required: true,
+          default:"..."
+      }
+  });
 
   const bubbleClass = computed(() => {
     return props.from === 'bot'
@@ -61,13 +65,4 @@
             return userAvatar;
         }
     });
-
-    const formatMessage = (message) => {
-      if (!message) return '';
-
-      let formatted = message.replace(/\n/g, '<br>');
-      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-      return formatted;
-    }
 </script>

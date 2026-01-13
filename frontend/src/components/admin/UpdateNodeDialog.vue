@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="localModel" max-width="800">
-    <v-card class="pa-6 rounded-xl elevation-2 border overflow-y-auto " style="max-height: 90vh;">
+  <v-dialog v-model="localModel" max-width="900">
+    <v-card class="pa-6 rounded-xl elevation-2 border overflow-y-auto " color="#121212" style="max-height: 90vh;">
       <div class="mb-4">
         {{ title }}
       </div>
@@ -18,15 +18,15 @@
           prepend-icon="mdi-message-text-outline"
           class="mb-6"
           rows="4"
-          auto-grow
           required
         />
 
-        <v-card class="pa-4 mb-6 border rounded-lg">
+        <v-card class="pa-4 mb-6 border rounded-lg" color="#121212">
           <div class="d-flex justify-space-between align-center mb-2">
             <h3 class="text-subtitle-1 font-weight-medium">Opciones</h3>
             <v-btn
-              size="medium"
+              variant="none"
+              size="regular"
               prepend-icon="mdi-plus"
               class="elevation-0 pa-2"
               @click="addOption"
@@ -35,8 +35,8 @@
 
           <v-divider class="mb-4"></v-divider>
 
-          <div v-for="(option, index) in form.options" :key="option._id" class="d-flex gap-4 mb-4 flex-wrap">
-            <v-text-field v-model="option.text" label="Texto" class="flex-1" required />
+          <div v-for="(option, index) in form.options" :key="option._id" class=" gap-4 mb-4 flex-wrap">
+            <v-text-field v-model="option.text" label="Texto" class="" required />
 
             <v-select
               v-model="option.next_node"
@@ -44,7 +44,6 @@
               item-title="title"
               item-value="id"
               label="Vincular a nodo"
-              class="flex-1"
               required
             />
 

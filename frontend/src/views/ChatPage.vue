@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0 h-100 overflow-hidden">
+  <v-container class="pa-0 h-100 overflow-hidden border-s border-e">
     <v-row class="ma-0 ms-10 me-10 h-100">
       <v-col cols="9" class="d-flex flex-column h-100 pa-0">
         <div ref="chatContainer" class="flex-grow-1 overflow-y-auto ms-5 me-5">
@@ -12,6 +12,7 @@
                 :key="index"
                 :message="msg.text"
                 :from="msg.from"
+                class="slide-up"
               />
               <div v-if="currentNode" class="mb-10">
                 <chat-message :message="currentNode.message" from="bot" class="slide-up"/>
@@ -20,6 +21,9 @@
                     <chat-option class="slide-up" @click="selectOption(option)" :text="option.text" />
                   </v-col>
                 </v-row>
+              </div>
+              <div v-else class="mb-10">
+                <chat-message from="bot" class="slide-up"/>
               </div>
               <div ref="bottomAnchor"></div>
             </div>
@@ -36,9 +40,9 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
-import ChatMessage from '@/components/ChatMessage.vue'
-import ChatOption from '@/components/ChatOption.vue'
-import ChatHistory from '@/components/ChatHistory.vue'
+import ChatMessage from '@/components/chat/ChatMessage.vue'
+import ChatOption from '@/components/chat/ChatOption.vue'
+import ChatHistory from '@/components/chat/ChatHistory.vue'
 import { nodesSessionManager } from '@/stores/nodesSessionManager.js' 
 import { chatSessionManager } from '@/stores/chatSessionManager'
 
@@ -53,6 +57,9 @@ const loading = ref(true)
 
 const bottomAnchor = ref(null)
 const chatContainer = ref(null)
+
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const scrollToBottom = () => {
   nextTick(() => {
@@ -105,6 +112,10 @@ const selectOption = async (option) => {
     message: option.text,
     from: "user"
   })
+
+  currentNode.value = null
+
+  await sleep(900)
 
   currentNode.value = await loadNode(option.next_node)
   nodeHistory.value.push(currentNode.value)

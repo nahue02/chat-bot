@@ -30,7 +30,7 @@
             <div class="text-h6 mb-1">
               {{data.title}}
             </div>
-            <div class="text-caption" v-html="formatMessage(data.message)"></div>
+            <div class="text-caption" v-html="format(data.message)"></div>
           </v-card-item>
           <v-divider></v-divider>
           <v-card-actions class="d-flex flex-column align-start gap-2">
@@ -62,87 +62,81 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { VueFlow, useVueFlow } from '@vue-flow/core'
-import '@vue-flow/core/dist/style.css'
-import '@vue-flow/core/dist/theme-default.css';
-import { Background } from '@vue-flow/background'
-import UpdateNodeDialog from '@/components/UpdateNodeDialog.vue'
-import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
-import { MiniMap } from '@vue-flow/minimap'
-import '@vue-flow/minimap/dist/style.css'
+  import { ref, onMounted } from 'vue'
+  import { VueFlow, useVueFlow } from '@vue-flow/core'
+  import '@vue-flow/core/dist/style.css'
+  import '@vue-flow/core/dist/theme-default.css';
+  import { Background } from '@vue-flow/background'
+  import UpdateNodeDialog from '@/components/admin/UpdateNodeDialog.vue'
+  import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
+  import { MiniMap } from '@vue-flow/minimap'
+  import '@vue-flow/minimap/dist/style.css'
+  import { formatText } from '@/scripts/formatText'
 
-const title = "Message Flow"
-const color = ref("primary")
-const cardVariant = ref("flat")
+  const format = formatText()
 
-const showEditDialog = ref(false)
-const selectedId = ref(null)
+  const color = ref("primary")
+  const cardVariant = ref("flat")
 
-const openEdit = (id) => {
-  selectedId.value = id
-  showEditDialog.value = true
-}
+  const showEditDialog = ref(false)
+  const selectedId = ref(null)
 
-const { nodes, loadNodes, updateNodePosition } = nodesSessionManager()
-
-const edges = ref([])
-const mappedNodes = ref([])
-
-const { findNode, setCenter, onNodeDragStop } = useVueFlow()
-
-onNodeDragStop(({ node }) => {
-  updateNodePosition(node.id, node.position)
-})
-
-onMounted(async () => {
-  await loadNodes()
-
-  mappedNodes.value = nodes.value.map(node => ({
-    id: String(node.id),
-    data: { 
-      title: node.title,
-      message: node.message,
-      options: node.node_options
-    },
-    type: 'custom',
-    position: node.node_positions?.length > 0
-  ? {
-      x: Number(node.node_positions[0].x) || 100,
-      y: Number(node.node_positions[0].y) || 100
-    }
-  : { x: 100, y: 100 },
-  }))
-
-  edges.value = mappedNodes.value.flatMap(sourceNode =>
-    (sourceNode.data?.options || []).map(opt => {
-      const targetNode = mappedNodes.value.find(
-        n => String(n.id) === String(opt.next_node)
-      )
-    
-      const isBackward =
-        targetNode &&
-        targetNode.position.y < sourceNode.position.y
-    
-      return {
-        id: `e${sourceNode.id}-${opt.next_node}`,
-        source: String(sourceNode.id),
-        target: String(opt.next_node),
-        type: 'smoothstep',
-        class: isBackward ? 'edge-backward' : 'edge-forward'
-      }
-    })
-  )
-})
-
-  const formatMessage = (message) => {
-    if (!message) return '';
-
-    let formatted = message.replace(/\n/g, '<br>');
-    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    return formatted;
+  const openEdit = (id) => {
+    selectedId.value = id
+    showEditDialog.value = true
   }
+
+  const { nodes, loadNodes, updateNodePosition } = nodesSessionManager()
+
+  const edges = ref([])
+  const mappedNodes = ref([])
+
+  const { findNode, setCenter, onNodeDragStop } = useVueFlow()
+
+  onNodeDragStop(({ node }) => {
+    updateNodePosition(node.id, node.position)
+  })
+
+  onMounted(async () => {
+    await loadNodes()
+
+    mappedNodes.value = nodes.value.map(node => ({
+      id: String(node.id),
+      data: { 
+        title: node.title,
+        message: node.message,
+        options: node.node_options
+      },
+      type: 'custom',
+      position: node.node_positions?.length > 0
+    ? {
+        x: Number(node.node_positions[0].x) || 100,
+        y: Number(node.node_positions[0].y) || 100
+      }
+    : { x: 100, y: 100 },
+    }))
+
+    edges.value = mappedNodes.value.flatMap(sourceNode =>
+      (sourceNode.data?.options || []).map(opt => {
+        const targetNode = mappedNodes.value.find(
+          n => String(n.id) === String(opt.next_node)
+        )
+      
+        const isBackward =
+          targetNode &&
+          targetNode.position.y < sourceNode.position.y
+      
+        return {
+          id: `e${sourceNode.id}-${opt.next_node}`,
+          source: String(sourceNode.id),
+          target: String(opt.next_node),
+          type: 'smoothstep',
+          class: isBackward ? 'edge-backward' : 'edge-forward'
+        }
+      })
+    )
+  })
+
 
   function goToNode(targetId) {
     const node = findNode(String(targetId))
