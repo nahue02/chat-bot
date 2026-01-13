@@ -1,14 +1,14 @@
 <script setup>
   import NavigationDrawer from './components/NavigationDrawer.vue';
+  import TopBar from './components/TopBar.vue';
 </script>
 
 <template>
   <v-app>
-    <v-layout class="h-100 overflow-hidden">
-      <NavigationDrawer/>
-
-      <v-main>
-        <router-view v-slot="{ Component }" class="background-dark">
+    <v-layout>
+      <TopBar />
+      <v-main class="background-dark">
+        <router-view v-slot="{ Component }">
           <component :is="Component"/>
         </router-view>
       </v-main>

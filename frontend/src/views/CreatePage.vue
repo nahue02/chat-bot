@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 d-flex h-100" >
+  <v-container fluid class="pa-0 d-flex h-100 " >
     <v-container class="py-6">
       <v-alert
         v-if="errors.title"

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex mb-4"
+    class="d-flex"
     :class="props.from === 'bot' ? 'justify-start' : 'justify-end'"
   >
     <v-avatar
@@ -12,18 +12,18 @@
 
     <v-sheet
       v-if="props.from === 'bot'"
-      class="ps-4 pe-4"
+      class="ps-4 pe-4 pa-3"
       :class="bubbleClass"
-      :color="props.from === 'bot' ? '#09090b' : 'primary'"
+      color="#121212"
       max-width="90%"
     >
       <div class="ma-0" v-html="formatMessage(message)"></div>
     </v-sheet>
     <v-sheet
       v-else
-      class="ps-4 pe-4 pa-2 mt-8 mb-8"
+      class="ps-4 pe-4 pa-3 mt-8 mb-8"
       :class="bubbleClass"
-      :color="props.from === 'bot' ? '#09090b' : 'primary'"
+      color=primary
       max-width="90%"
     >
       <div class="ma-0" v-html="formatMessage(message)"></div>
@@ -50,7 +50,7 @@
 
   const bubbleClass = computed(() => {
     return props.from === 'bot'
-      ? 'rounded-s-sm rounded-e-xl'
+      ? 'rounded-s-lg rounded-e-xl'
       : 'rounded-e-lg rounded-s-xl';
   });
 

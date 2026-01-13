@@ -30,7 +30,7 @@
         </v-list>
         
         <v-list density="compact" nav>
-          <v-list-item v-for="item in routesList"  :key="item.id"
+          <v-list-item v-for="item in routesList" :key="item.id"
             :prepend-icon=item.icon 
             :to=item.route
             class="rounded-lg"

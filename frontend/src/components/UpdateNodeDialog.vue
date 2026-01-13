@@ -133,6 +133,7 @@ async function loadForm(data) {
 }
 
 async function destroy() {
+  console.log(props.nodeId)
   deleteNode(props.nodeId)
   router.go('/admin')
 }

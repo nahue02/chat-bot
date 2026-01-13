@@ -1,15 +1,48 @@
 <template>
-    <v-app-bar :elevation="0" class="border-b position-fixed">
-      <v-app-bar-title>{{ title }}</v-app-bar-title>
+    <v-app-bar class="position-fixed" :elevation="0" density="compact" color="#09090b">
+      <template v-slot:prepend>
+        <v-btn v-for="item in routesList" :key="item.id" variant="outlined" size="small" :to="item.route" class="ms-3 border-thin">
+          <v-icon :icon="item.icon"></v-icon>
+        </v-btn>
+        <v-btn variant="outlined" size="small" to="/create" class="ms-3 border-thin">
+          <v-icon icon="mdi-message-plus-outline"></v-icon>
+        </v-btn>
+      </template>
+      
+      <template v-slot:append>
+        <v-btn variant="tonal" @click="reload">
+          <v-icon icon="mdi-apple-keyboard-option"></v-icon>
+        </v-btn>
+      </template>
     </v-app-bar>
 </template>
 
 <script setup>
-  
-  defineProps({
-    title: {
-        type: String,
-        required: true
-    }
-  });
+  import { ref } from 'vue'
+  import { nodesSessionManager } from '@/stores/nodesSessionManager';
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+ 
+  const routesList = ref([
+    {
+      id: 1,
+      title: "Chat",
+      icon: "mdi-message-badge-outline",
+      route: "/"
+    },
+    {
+      id: 2,
+      title: "Flowchart",
+      icon: "mdi-sitemap-outline",
+      route: "/admin"
+    },
+  ])
+
+  function reload() {
+    const { clearAll } = nodesSessionManager()
+
+    clearAll()
+    router.go('/')
+  }
 </script>

@@ -88,14 +88,6 @@ export function nodesSessionManager() {
 
     nodes.value.splice(index, 1);
 
-    nodes.value = nodes.value.filter((n) => String(n.id) !== String(id));
-
-    nodes.value.forEach((n) => {
-      n.options = n.options.filter(
-        (opt) => String(opt.next_node) !== String(id)
-      );
-    });
-
     clearAllData();
     sessionStorage.setItem(NODES_KEY, JSON.stringify(nodes.value));
   };

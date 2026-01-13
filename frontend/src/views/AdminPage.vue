@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="pa-0 fill-height overflow-auto">
-    
     <VueFlow 
     v-model:nodes="mappedNodes" 
     v-model:edges="edges"
@@ -11,6 +10,7 @@
     }"
     >
       <template #node-custom="{ id, data }">
+        
         <v-card
         :color="color"
         :variant="cardVariant"
