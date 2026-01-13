@@ -7,14 +7,15 @@
       <form @submit.prevent="submitForm">
         <v-text-field
           v-model="form.title"
-          label="Título del nodo"
+          label="Title"
           prepend-icon="mdi-format-title"
           class="mb-4"
         />
 
         <v-textarea
           v-model="form.message"
-          label="Mensaje"
+          label="Text"
+          placeholder="Use **text** to bold text"
           prepend-icon="mdi-message-text-outline"
           class="mb-6"
           rows="4"
@@ -23,7 +24,7 @@
 
         <v-card class="pa-4 mb-6 border rounded-lg" color="#121212">
           <div class="d-flex justify-space-between align-center mb-2">
-            <h3 class="text-subtitle-1 font-weight-medium">Opciones</h3>
+            <h3 class="text-subtitle-1 font-weight-medium">Options</h3>
             <v-btn
               variant="none"
               size="regular"
@@ -35,15 +36,15 @@
 
           <v-divider class="mb-4"></v-divider>
 
-          <div v-for="(option, index) in form.options" :key="option._id" class=" gap-4 mb-4 flex-wrap">
-            <v-text-field v-model="option.text" label="Texto" class="" required />
+          <div v-for="(option, index) in form.options" :key="option._id" class="gap-4 mb-4 flex-wrap">
+            <v-text-field v-model="option.text" label="Message" required />
 
             <v-select
               v-model="option.next_node"
               :items="nodes"
               item-title="title"
               item-value="id"
-              label="Vincular a nodo"
+              label="Next node"
               required
             />
 
@@ -52,9 +53,9 @@
         </v-card>
 
         <v-card-actions class="d-flex justify-end">
-          <v-btn variant="text" @click="closeDialog">Cancelar</v-btn>
-          <v-btn @click="destroy" color="error" prepend-icon="mdi-alert">Eliminar</v-btn>
-          <v-btn type="submit" color="primary" prepend-icon="mdi-content-save">Guardar</v-btn>
+          <v-btn variant="text" @click="closeDialog">Cancel</v-btn>
+          <v-btn @click="destroy" color="error" prepend-icon="mdi-alert">Delete</v-btn>
+          <v-btn type="submit" color="primary" prepend-icon="mdi-content-save">Save</v-btn>
         </v-card-actions>
 
       </form>

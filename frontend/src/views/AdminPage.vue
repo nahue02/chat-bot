@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 fill-height overflow-auto">
+  <v-container class="pa-0 w-100 fill-height overflow-auto">
     <VueFlow 
     v-model:nodes="mappedNodes" 
     v-model:edges="edges"
@@ -10,7 +10,6 @@
     }"
     >
       <template #node-custom="{ id, data }">
-        
         <v-card
         :color="color"
         :variant="cardVariant"
@@ -35,7 +34,7 @@
           <v-divider></v-divider>
           <v-card-actions class="d-flex flex-column align-start gap-2">
             <div v-if="data.options.length === 0" class="ma-auto">
-              No hay opciones
+              No options
             </div>
             <v-btn 
             v-for="option in data.options" 

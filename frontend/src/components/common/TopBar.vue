@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar class="position-fixed" :elevation="0" density="compact" color="#09090b">
+    <v-app-bar class="position-fixed border-b" :elevation="0" density="compact" color="#09090b">
       <template v-slot:prepend>
         <v-btn v-for="item in routesList" :key="item.id" variant="outlined" size="small" :to="item.route" class="ms-3 border-thin">
           <v-icon :icon="item.icon"></v-icon>
@@ -9,11 +9,23 @@
         </v-btn>
       </template>
       
-      <template v-slot:append>
-        <v-btn variant="tonal" @click="reload">
-          <v-icon icon="mdi-apple-keyboard-option"></v-icon>
-        </v-btn>
-      </template>
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn variant="tonal" v-bind="props">
+            <v-icon icon="mdi-apple-keyboard-option"></v-icon>
+          </v-btn>
+        </template>
+        <v-list class="mt-1">
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            :value="index"
+            @click="item.onClick"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 </template>
 
@@ -38,6 +50,15 @@
       route: "/admin"
     },
   ])
+
+  const items = ref([
+    { title: 'About', onClick: "" },
+    { title: 'Restart Settings', onClick: reload },
+  ])
+
+  function openAboutModal() {
+    
+  }
 
   function reload() {
     const { clearAll } = nodesSessionManager()

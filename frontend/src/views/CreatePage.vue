@@ -15,14 +15,15 @@
 
           <v-text-field
             v-model="form.title"
-            label="Título del nodo"
+            label="Title"
             prepend-icon="mdi-format-title"
             class="mb-4"
           />
 
           <v-textarea
             v-model="form.message"
-            label="Mensaje"
+            label="Text"
+            placeholder="Use **text** to bold text"
             prepend-icon="mdi-message-text-outline"
             class="mb-6"
             rows="4"
@@ -36,7 +37,7 @@
             color="transparent"
           >
             <div class="d-flex justify-space-between align-center mb-2">
-              <h3 class="text-subtitle-1 font-weight-medium">Opciones</h3>
+              <h3 class="text-subtitle-1 font-weight-medium">Options</h3>
               <v-btn
                 size="medium"
                 prepend-icon="mdi-plus"
@@ -47,7 +48,7 @@
 
             <v-divider class="mb-4"></v-divider>
 
-            <span v-if="form.options.length === 0">No se agregaron opciones</span>
+            <span v-if="form.options.length === 0">No options added</span>
 
             <div
               v-for="(option, index) in form.options"
@@ -56,7 +57,7 @@
             >
               <v-text-field
                 v-model="option.text"
-                label="Texto"
+                label="Message"
                 class="flex-1 mr-4"
                 required
               />
@@ -66,7 +67,7 @@
                 :items="nodes"
                 item-title="title"
                 item-value="id"
-                label="Vincular a nodo"
+                label="Next node"
                 class="flex-1 ml-2 mr-4"
                 required
               />
@@ -85,7 +86,7 @@
             color="primary"
             prepend-icon="mdi-content-save"
           >
-            Crear nodo
+            Create
           </v-btn>
         </form>
       </v-card>

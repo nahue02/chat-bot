@@ -1,12 +1,12 @@
 <template>
-  <v-container class="pa-0 h-100 overflow-hidden border-s border-e">
+  <v-container class="w-75 h-100 overflow-y-auto">
     <v-row class="ma-0 ms-10 me-10 h-100">
       <v-col cols="9" class="d-flex flex-column h-100 pa-0">
-        <div ref="chatContainer" class="flex-grow-1 overflow-y-auto ms-5 me-5">
+        <div ref="chatContainer" class="flex-grow-1 ms-5 me-5">
             <div v-if="loading" class="d-flex justify-center align-center fill-height">
               <v-progress-circular indeterminate></v-progress-circular>
             </div>
-            <div v-else class="d-flex flex-column justify-end overflow-x-hidden" style="min-height: 100%;">
+            <div v-else class="d-flex flex-column justify-end overflow-x-hidden overflow-hidedn" style="min-height: 100%;">
               <chat-message
                 v-for="(msg, index) in messages"
                 :key="index"
@@ -30,7 +30,7 @@
         </div>
       </v-col>
       <v-col cols="3" class="d-flex flex-column h-100 border-s">
-        <v-sheet class="flex-grow-1 overflow-y-auto" color="transparent">
+        <v-sheet class="flex-grow-1" color="transparent">
           <chat-history :node-history="nodeHistory" class="slide-up" />
         </v-sheet>
       </v-col>
