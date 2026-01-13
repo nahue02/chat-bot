@@ -1,11 +1,8 @@
 <template>
-    <v-app-bar class="position-fixed border-b" :elevation="0" density="compact" color="#09090b">
+    <v-app-bar class="position-fixed" :elevation="0" density="compact" color="#09090b">
       <template v-slot:prepend>
-        <v-btn v-for="item in routesList" :key="item.id" variant="outlined" size="small" :to="item.route" class="ms-3 border-thin">
+        <v-btn v-for="item in routesList" :key="item.id" variant="tonal" size="small" :to="item.route" class="ms-3">
           <v-icon :icon="item.icon"></v-icon>
-        </v-btn>
-        <v-btn variant="outlined" size="small" to="/create" class="ms-3 border-thin">
-          <v-icon icon="mdi-message-plus-outline"></v-icon>
         </v-btn>
       </template>
       
@@ -49,6 +46,12 @@
       icon: "mdi-sitemap-outline",
       route: "/admin"
     },
+    {
+      id: 3,
+      title: "Create node",
+      icon: "mdi-plus",
+      route: "/create"
+    }
   ])
 
   const items = ref([

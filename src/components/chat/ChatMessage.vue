@@ -6,27 +6,25 @@
     <v-avatar
       v-if="props.from === 'bot'"
       class="mr-3"
-      size="36"
-      :image="avatar"
+      size="30"
+      :image="botAvatar"
     />
 
     <v-sheet
       v-if="props.from === 'bot'"
-      class="ps-4 pe-4 pa-3"
-      :class="bubbleClass"
+      class="ps-4 pe-4 pa-3 rounded-xl"
       color="#121212"
-      max-width="90%"
+      max-width="80%"
     >
-      <div class="ma-0" v-html="format(message)"></div>
+      <div class="ma-0 text-body-2" v-html="format(message)"></div>
     </v-sheet>
     <v-sheet
       v-else
-      class="ps-4 pe-4 pa-3 mt-8 mb-8"
-      :class="bubbleClass"
+      class="ps-4 pe-4 pa-3 mt-8 mb-8 rounded-xl"
       color=primary
-      max-width="90%"
+      max-width="80%"
     >
-      <div class="ma-0" v-html="format(message)"></div>
+      <div class="ma-0 text-body-2" v-html="format(message)"></div>
     </v-sheet>
   </div>
 </template>
@@ -51,18 +49,4 @@
           default:"..."
       }
   });
-
-  const bubbleClass = computed(() => {
-    return props.from === 'bot'
-      ? 'rounded-s-lg rounded-e-xl'
-      : 'rounded-e-lg rounded-s-xl';
-  });
-
-    const avatar = computed(() => {
-        if (props.from === 'bot') {
-            return botAvatar;
-        } else {
-            return userAvatar;
-        }
-    });
 </script>

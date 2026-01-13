@@ -1,31 +1,40 @@
 <template>
-  <v-container class="h-100 overflow-y-auto">
-    <div class="w-75 h-100 ma-auto">
-      <div v-if="loading" class="d-flex justify-center align-center fill-height">
-        <v-progress-circular indeterminate></v-progress-circular>
-      </div>
-      <div v-else class="d-flex flex-column justify-end overflow-x-hidden" style="min-height: 90%;">
-        <chat-message
-          v-for="(msg, index) in messages"
-          :key="index"
-          :message="msg.text"
-          :from="msg.from"
-          class="slide-up"
-        />
-        <div v-if="currentNode" class="mb-10">
-          <chat-message :message="currentNode.message" from="bot" class="slide-up"/>
-          <v-row class="w-100 ms-14 mt-4" dense style="column-gap: 1rem;">
-            <v-col v-for="option in currentNode.node_options" :key="option.id" cols="auto" class="pa-0">
-              <chat-option class="slide-up" @click="selectOption(option)" :text="option.text" />
-            </v-col>
-          </v-row>
+  <v-container class="w-75 h-100 overflow-y-auto">
+    <v-row class="ma-0 ms-10 me-10 h-100">
+      <v-col cols="9" class="d-flex flex-column h-100 pa-0">
+        <div ref="chatContainer" class="flex-grow-1 ms-5 me-5">
+            <div v-if="loading" class="d-flex justify-center align-center fill-height">
+              <v-progress-circular indeterminate></v-progress-circular>
+            </div>
+            <div v-else class="d-flex flex-column justify-end overflow-x-hidden overflow-hidedn" style="min-height: 100%;">
+              <chat-message
+                v-for="(msg, index) in messages"
+                :key="index"
+                :message="msg.text"
+                :from="msg.from"
+                class="slide-up"
+              />
+              <div v-if="currentNode" class="mb-10">
+                <chat-message :message="currentNode.message" from="bot" class="slide-up"/>
+                <v-row class="mt-4 ml-16" dense style="column-gap: 1rem;">
+                  <v-col v-for="option in currentNode.node_options" :key="option.id" cols="auto" class="pa-0">
+                    <chat-option class="slide-up" @click="selectOption(option)" :text="option.text" />
+                  </v-col>
+                </v-row>
+              </div>
+              <div v-else class="mb-10">
+                <chat-message from="bot" class="slide-up"/>
+              </div>
+              <div ref="bottomAnchor"></div>
+            </div>
         </div>
-        <div v-else class="mb-10">
-          <chat-message from="bot" class="slide-up"/>
-        </div>
-        <div ref="bottomAnchor"></div>
-      </div>
-    </div>
+      </v-col>
+      <v-col cols="3" class="d-flex flex-column h-100 border-s">
+        <v-sheet class="flex-grow-1" color="transparent">
+          <chat-history :node-history="nodeHistory" class="slide-up" />
+        </v-sheet>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
