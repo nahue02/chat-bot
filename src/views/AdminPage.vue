@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0 w-100 fill-height overflow-auto">
+  <v-container fluid class="pa-0 w-100 fill-height overflow-y-auto">
     <VueFlow 
     v-model:nodes="mappedNodes" 
     v-model:edges="edges"
@@ -32,7 +32,7 @@
             <div class="text-caption" v-html="format(data.message)"></div>
           </v-card-item>
           <v-divider></v-divider>
-          <v-card-actions class="d-flex flex-column align-start gap-2">
+          <v-card-actions class="d-flex flex-column align-start gap-2 pb-3">
             <div v-if="data.options.length === 0" class="ma-auto">
               No options
             </div>
@@ -46,7 +46,7 @@
           </v-card-actions>
         </v-card>
       </template>
-      <MiniMap 
+      <MiniMap
         :node-color="color"
       />
       <Background />

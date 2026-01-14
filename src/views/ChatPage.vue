@@ -1,31 +1,47 @@
 <template>
   <v-container class="h-100 overflow-y-auto">
-    <div class="w-75 h-100 ma-auto">
-      <div v-if="loading" class="d-flex justify-center align-center fill-height">
-        <v-progress-circular indeterminate></v-progress-circular>
-      </div>
-      <div v-else class="d-flex flex-column justify-end overflow-x-hidden" style="min-height: 90%;">
-        <chat-message
-          v-for="(msg, index) in messages"
-          :key="index"
-          :message="msg.text"
-          :from="msg.from"
-          class="slide-up"
-        />
-        <div v-if="currentNode" class="mb-10">
-          <chat-message :message="currentNode.message" from="bot" class="slide-up"/>
-          <v-row class="w-100 ms-14 mt-4" dense style="column-gap: 1rem;">
-            <v-col v-for="option in currentNode.node_options" :key="option.id" cols="auto" class="pa-0">
-              <chat-option class="slide-up" @click="selectOption(option)" :text="option.text" />
-            </v-col>
-          </v-row>
-        </div>
-        <div v-else class="mb-10">
-          <chat-message from="bot" class="slide-up"/>
-        </div>
-        <div ref="bottomAnchor"></div>
-      </div>
+    <v-btn
+      class="position-fixed top-0 right-0 mt-15 mr-1 z-10"
+      @click="showFlow = !showFlow"
+    >
+      <v-icon icon="mdi-page-layout-sidebar-right" />
+    </v-btn>
+    <div class="h-100 w-75 ma-auto">
+      <v-row class="h-100 ma-0">
+        <v-col :cols="showFlow ? 8 : 12" class="transition-all">
+          <div class="h-100 ma-auto">
+            <div v-if="loading" class="d-flex justify-center align-center fill-height">
+              <v-progress-circular indeterminate></v-progress-circular>
+            </div>
+            <div v-else class="d-flex flex-column justify-end overflow-x-hidden" style="min-height: 90%;">
+              <chat-message
+                v-for="(msg, index) in messages"
+                :key="index"
+                :message="msg.text"
+                :from="msg.from"
+                class="slide-up"
+              />
+              <div v-if="currentNode" class="mb-10">
+                <chat-message :message="currentNode.message" from="bot" class="slide-up"/>
+                <v-row class="w-100 ps-14 mt-4 ga-4" dense >
+                  <v-col v-for="option in currentNode.node_options" :key="option.id" cols="auto" class="pa-0">
+                    <chat-option class="slide-up" @click="selectOption(option)" :text="option.text" />
+                  </v-col>
+                </v-row>
+              </div>
+              <div v-else class="mb-10">
+                <chat-message from="bot" class="slide-up"/>
+              </div>
+              <div ref="bottomAnchor"></div>
+            </div>
+          </div>
+        </v-col>
+        <v-col v-if="showFlow" cols="4" class="border-s h-100 overflow-y-auto">
+          <chat-history :node-history="nodeHistory" />
+        </v-col>
+      </v-row>
     </div>
+
   </v-container>
 </template>
 
@@ -47,7 +63,8 @@ const nodeHistory = ref([])
 const loading = ref(true)
 
 const bottomAnchor = ref(null)
-const chatContainer = ref(null)
+
+const showFlow = ref(false)
 
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
