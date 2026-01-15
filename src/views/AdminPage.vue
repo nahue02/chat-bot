@@ -13,7 +13,7 @@
         <v-card
         :color="color"
         :variant="cardVariant"
-        class="mx-auto rounded-xl"
+        class="mx-auto rounded-xl elevation-1"
         width="300"
         >
           <v-card-item>

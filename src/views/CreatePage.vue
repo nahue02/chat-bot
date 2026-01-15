@@ -1,86 +1,69 @@
 <template>
     <v-container>
       <div class="w-75 ma-auto">
-        <div class="text-h5 mb-14">
+        <div class="text-h5 mb-8 mt-5">
           Create a new Node
         </div>
-        <v-card class="elevation-0 pt-2 overflow-y-auto" color="transparent">
+        <div class="elevation-0 pt-2 overflow-y-auto" color="transparent">
           <form @submit.prevent="submitForm">
-            <v-text-field
-              v-model="form.title"
-              variant="outlined"
-              label="Title"
+            <v-text-field v-model="form.title" variant="plain" label="Title"
             />
   
-            <v-textarea
-              v-model="form.message"
-              label="Text"
-              variant="outlined"
-              placeholder="Use **text** to bold text"
-              rows="4"
-              auto-grow
-              required
+            <v-textarea v-model="form.message" label="Text" variant="plain" placeholder="Use **text** to bold text" rows="4" auto-grow required
             />
   
-            <v-card
-              class="pa-4 mb-6 border"
-              rounded="lg"
-              color="transparent"
-            >
-              <div class="d-flex justify-space-between align-center mb-2">
-                <h3 class="text-subtitle-1 font-weight-medium">Options</h3>
-                <v-btn
-                  size="medium"
-                  prepend-icon="mdi-plus"
-                  class="elevation-0 pa-2"
-                  @click="addOption"
-                ></v-btn>
+            <div class="border pa-5 mb-6 rounded-lg">
+              <div class="d-flex justify-space-between align-center mb-4">
+                <div class="text-subtitle-1 font-weight-medium">
+                  Options
+                </div>
+
+                <v-btn variant="none" size="regular" prepend-icon="mdi-plus" class="elevation-0 pa-2" @click="addOption">
+                </v-btn>
               </div>
-  
-              <v-divider class="mb-4"></v-divider>
-  
-              <span v-if="form.options.length === 0">No options added</span>
-  
+
+              <div v-if="form.options.length === 0">
+                No options added yet
+              </div>
+              
               <div
                 v-for="(option, index) in form.options"
                 :key="option._id"
-                class="d-flex align-center gap-4 mb-4 flex-wrap"
+                class="slide-up"
               >
+                <div class="d-flex justify-space-between">
+                  <div></div>
+
+                  <v-btn icon="mdi-close" size="small" variant="plain" @click="removeOption(index)" />
+                </div>
+                
                 <v-text-field
                   v-model="option.text"
                   label="Message"
-                  class="flex-1 mr-4"
+                  variant="outlined"
                   required
                 />
-                
                 <v-select
                   v-model="option.next_node"
                   :items="nodes"
                   item-title="title"
                   item-value="id"
                   label="Next node"
-                  class="flex-1 ml-2 mr-4"
+                  variant="outlined"
                   required
                 />
-  
-                <v-btn
-                  color="red"
-                  icon="mdi-delete"
-                  variant="plain"
-                  @click="removeOption(index)"
-                />
               </div>
-            </v-card>
-  
-            <v-btn
-              type="submit"
-              color="primary"
-              prepend-icon="mdi-content-save"
-            >
-              Create
-            </v-btn>
+            </div> 
+            <div class="d-flex justify-end">
+              <v-btn
+                type="submit"
+                color="primary"
+              >
+                Create
+              </v-btn>
+            </div>
           </form>
-        </v-card>
+        </div>
       </div>
     </v-container>
 </template>
@@ -121,3 +104,20 @@ onMounted(() => {
   loadNodes()
 })
 </script>
+
+<style>
+  .slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>

@@ -1,5 +1,0 @@
-<template>
-    <dialog>
-        
-    </dialog>
-</template>

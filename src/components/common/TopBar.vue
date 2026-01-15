@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar class="position-fixed" :elevation="0" density="compact" color="#09090b">
+    <v-app-bar class="position-fixed border-b" :elevation="0" density="compact" color="#09090b">
       <template v-slot:prepend>
         <v-btn v-for="item in routesList" :key="item.id" variant="tonal" size="small" :to="item.route" class="ms-3">
           <v-icon :icon="item.icon"></v-icon>
@@ -12,7 +12,7 @@
             <v-icon icon="mdi-apple-keyboard-option"></v-icon>
           </v-btn>
         </template>
-        <v-list class="mt-1">
+        <v-list class="mt-1 border" density="compact" variant="none" color="#09090b">
           <v-list-item
             v-for="(item, index) in items"
             :key="index"
@@ -24,15 +24,24 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+
+    <AboutDialog v-model="showAboutDialog" />
+    <CustomizeDialog v-model="showCustomizeDialog" />
+    <RestartDialog v-model="showRestartDialog" />
 </template>
 
 <script setup>
   import { ref } from 'vue'
-  import { nodesSessionManager } from '@/stores/nodesSessionManager';
-  import { useRouter } from 'vue-router'
 
-  const router = useRouter()
+  import AboutDialog from './AboutDialog.vue';
+  import CustomizeDialog from './CustomizeDialog.vue';
+  import RestartDialog from './RestartDialog.vue';
+
  
+  const showAboutDialog = ref(false)
+  const showCustomizeDialog= ref(false)
+  const showRestartDialog = ref(false)
+
   const routesList = ref([
     {
       id: 1,
@@ -55,18 +64,21 @@
   ])
 
   const items = ref([
-    { title: 'About', onClick: "" },
-    { title: 'Restart Settings', onClick: reload },
+    { title: 'About', onClick: openAboutDialog },
+    { title: 'Customize', onClick: openCustomizeDialog },
+    { title: 'Restart Settings', onClick: openRestartDialog },
   ])
 
-  function openAboutModal() {
-    
+  function openAboutDialog(){
+    showAboutDialog.value = true
+  }
+  
+  function openCustomizeDialog(){
+    showCustomizeDialog.value = true
   }
 
-  function reload() {
-    const { clearAll } = nodesSessionManager()
-
-    clearAll()
-    router.go('/')
+  function openRestartDialog(){
+    showRestartDialog.value = true
   }
+
 </script>

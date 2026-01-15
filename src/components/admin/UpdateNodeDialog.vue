@@ -1,64 +1,51 @@
 <template>
   <v-dialog v-model="localModel" max-width="900">
-    <v-card class="pa-6 rounded-xl elevation-2 border overflow-y-auto " color="#121212" style="max-height: 90vh;">
-      <div class="mb-4">
-        {{ title }}
-      </div>
+    <v-card class="pa-6 rounded-xl elevation-2 border overflow-y-auto" color="#09090b" style="max-height: 90vh;">
       <form @submit.prevent="submitForm">
-        <v-text-field
-          v-model="form.title"
-          label="Title"
-          prepend-icon="mdi-format-title"
-          class="mb-4"
-        />
-
-        <v-textarea
-          v-model="form.message"
-          label="Text"
-          placeholder="Use **text** to bold text"
-          prepend-icon="mdi-message-text-outline"
-          class="mb-6"
-          rows="4"
-          required
-        />
-
-        <v-card class="pa-4 mb-6 border rounded-lg" color="#121212">
-          <div class="d-flex justify-space-between align-center mb-2">
-            <h3 class="text-subtitle-1 font-weight-medium">Options</h3>
-            <v-btn
-              variant="none"
-              size="regular"
-              prepend-icon="mdi-plus"
-              class="elevation-0 pa-2"
-              @click="addOption"
-            ></v-btn>
+          <div class="d-flex justify-space-between align-center">
+            <div class="text-h6">
+              Update Node
+            </div>
+            <div>
+              <v-btn variant="plain" @click="closeDialog" icon="mdi-close"></v-btn>
+            </div>
           </div>
+          <div class="mt-8">
+            <v-text-field v-model="form.title" variant="plain" label="Title"/>
 
-          <v-divider class="mb-4"></v-divider>
+            <v-textarea v-model="form.message" label="Text" variant="plain" placeholder="Use **text** to bold text" rows="4" auto-grow required/>
 
-          <div v-for="(option, index) in form.options" :key="option._id" class="gap-4 mb-4 flex-wrap">
-            <v-text-field v-model="option.text" label="Message" required />
+            <div class="border pa-5 mb-6 rounded-lg">
+              <div class="d-flex justify-space-between align-center mb-4">
+                <div class="text-subtitle-1 font-weight-medium">
+                  Options
+                </div>
 
-            <v-select
-              v-model="option.next_node"
-              :items="nodes"
-              item-title="title"
-              item-value="id"
-              label="Next node"
-              required
-            />
+                <v-btn variant="none" size="regular" prepend-icon="mdi-plus" class="elevation-0 pa-2" @click="addOption"
+                ></v-btn>
+              </div>
+              <div v-if="form.options.length === 0">
+                No options added yet
+              </div>
+              <div v-for="(option, index) in form.options" :key="option._id" class="slide-up">
+                <div class="d-flex justify-space-between">
+                  <div></div>
 
-            <v-btn color="red" icon="mdi-delete" variant="plain" @click="removeOption(index)" />
+                  <v-btn icon="mdi-close" size="small" variant="plain" @click="removeOption(index)" />
+                </div>
+                
+                <v-text-field v-model="option.text" label="Message" variant="outlined" required />
+      
+                <v-select v-model="option.next_node" :items="nodes" item-title="title" item-value="id" label="Next node" variant="outlined" required/>
+              </div>
+            </div>
+    
+            <v-card-actions class="d-flex justify-end">
+              <v-btn @click="destroy" variant="tonal" color="primary">Delete Node</v-btn>
+              <v-btn type="submit" >Save Changes</v-btn>
+            </v-card-actions>
           </div>
-        </v-card>
-
-        <v-card-actions class="d-flex justify-end">
-          <v-btn variant="text" @click="closeDialog">Cancel</v-btn>
-          <v-btn @click="destroy" color="error" prepend-icon="mdi-alert">Delete</v-btn>
-          <v-btn type="submit" color="primary" prepend-icon="mdi-content-save">Save</v-btn>
-        </v-card-actions>
-
-      </form>
+        </form>
     </v-card>
   </v-dialog>
 </template>
@@ -72,7 +59,6 @@ const props = defineProps({
   modelValue: Boolean
 })
 
-const title = "Edit Node"
 
 const emit = defineEmits(['update:modelValue'])
 const router = useRouter()
@@ -138,3 +124,20 @@ async function destroy() {
   router.go('/admin')
 }
 </script>
+
+<style>
+  .slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
