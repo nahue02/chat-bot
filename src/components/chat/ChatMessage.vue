@@ -32,7 +32,6 @@
 <script setup>
   import { computed } from 'vue';
   import botAvatar from '@/assets/bot-avatar-3.jpg';
-  import userAvatar from '@/assets/bot-avatar.png'
   import { formatText } from '@/scripts/formatText'
 
   const format = formatText()

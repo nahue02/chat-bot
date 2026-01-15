@@ -38,7 +38,7 @@
   import RestartDialog from './RestartDialog.vue';
 
  
-  const showAboutDialog = ref(false)
+  const showAboutDialog = ref(true)
   const showCustomizeDialog= ref(false)
   const showRestartDialog = ref(false)
 
@@ -74,7 +74,7 @@
   }
   
   function openCustomizeDialog(){
-    showCustomizeDialog.value = true
+    console.log("coming soon i promise")
   }
 
   function openRestartDialog(){
