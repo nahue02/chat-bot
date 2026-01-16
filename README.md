@@ -1,38 +1,19 @@
-# chat bot assistant
+# Vue Chatbot Assistant
 
-This template should help get you started developing with Vue 3 in Vite.
+A visual playground to design and test conversational logic using a node-based interface.
 
-## Recommended IDE Setup
+### Why I built this
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+I started this project to practice **Vue 3** and some state management. I wanted to try building something entertaining, and this is what I came up with. Hope you enjoy it.
 
-## Recommended Browser Setup
+Feel free to mess around. Create infinite loops, delete all the nodes, or try to break the logic completely. Just have fun exploring how it works.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### Tools used
 
-## Customize configuration
+- **Vue 3**
+- **Vue Flow** (for the visual graph)
+- **Vuetify** (for styles)
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+[**Try Demo**](https://thunderous-tiramisu-1270cb.netlify.app/)
