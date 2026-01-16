@@ -42,7 +42,7 @@
     
             <v-card-actions class="d-flex justify-end">
               <v-btn @click="destroy" variant="tonal" color="primary">Delete Node</v-btn>
-              <v-btn type="submit" @click="reload" >Save Changes</v-btn>
+              <v-btn type="submit" @click="closeDialog" >Save Changes</v-btn>
             </v-card-actions>
           </div>
         </form>
@@ -119,12 +119,8 @@
   }
 
   async function destroy() {
-    deleteNode(props.nodeId)
-    router.go('/admin')
-  }
-
-  async function reload() {
-    router.go('/admin')
+    await deleteNode(props.nodeId)
+    closeDialog()
   }
 </script>
 

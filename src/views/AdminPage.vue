@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { VueFlow, useVueFlow } from '@vue-flow/core'
   import '@vue-flow/core/dist/style.css'
   import '@vue-flow/core/dist/theme-default.css';
@@ -87,9 +87,6 @@
 
   const { nodes, loadNodes, updateNodePosition } = nodesSessionManager()
 
-  const edges = ref([])
-  const mappedNodes = ref([])
-
   const { findNode, setCenter, onNodeDragStop } = useVueFlow()
 
   onNodeDragStop(({ node }) => {
@@ -98,8 +95,10 @@
 
   onMounted(async () => {
     await loadNodes()
+  })
 
-    mappedNodes.value = nodes.value.map(node => ({
+  const mappedNodes = computed(() => {
+    return nodes.value.map(node => ({
       id: String(node.id),
       data: { 
         title: node.title,
@@ -108,33 +107,35 @@
       },
       type: 'custom',
       position: node.node_positions?.length > 0
-    ? {
-        x: Number(node.node_positions[0].x) || 100,
-        y: Number(node.node_positions[0].y) || 100
-      }
-    : { x: 100, y: 100 },
+        ? {
+            x: Number(node.node_positions[0].x) || 100,
+            y: Number(node.node_positions[0].y) || 100
+          }
+        : { x: 100, y: 100 },
     }))
-
-    edges.value = mappedNodes.value.flatMap(sourceNode =>
-      (sourceNode.data?.options || []).map(opt => {
-        const targetNode = mappedNodes.value.find(
-          n => String(n.id) === String(opt.next_node)
-        )
-      
-        const isBackward =
-          targetNode &&
-          targetNode.position.y < sourceNode.position.y
-      
-        return {
-          id: `e${sourceNode.id}-${opt.next_node}`,
-          source: String(sourceNode.id),
-          target: String(opt.next_node),
-          type: 'smoothstep',
-          class: isBackward ? 'edge-backward' : 'edge-forward'
-        }
-      })
-    )
   })
+
+  const edges = computed(() => {
+      return mappedNodes.value.flatMap(sourceNode =>
+        (sourceNode.data?.options || []).map(opt => {
+          const targetNode = mappedNodes.value.find(
+            n => String(n.id) === String(opt.next_node)
+          )
+          
+          const isBackward =
+            targetNode &&
+            targetNode.position.y < sourceNode.position.y
+        
+          return {
+            id: `e${sourceNode.id}-${opt.next_node}`,
+            source: String(sourceNode.id),
+            target: String(opt.next_node),
+            type: 'smoothstep',
+            class: isBackward ? 'edge-backward' : 'edge-forward'
+          }
+        })
+      )
+    })
 
 
   function goToNode(targetId) {
