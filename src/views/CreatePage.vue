@@ -9,7 +9,7 @@
             <v-text-field v-model="form.title" variant="plain" label="Title"
             />
   
-            <v-textarea v-model="form.message" label="Text" variant="plain" placeholder="Use **text** to bold text" rows="4" auto-grow required
+            <v-textarea v-model="form.message" label="Text" variant="plain" placeholder="Surround text with ** to bold." rows="4" auto-grow required
             />
   
             <div class="border pa-5 mb-6 rounded-lg">
@@ -69,40 +69,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
-import { useRouter } from 'vue-router'
+  import { ref, onMounted } from 'vue'
+  import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
+  import { useRouter } from 'vue-router'
 
-const router = useRouter()
+  const router = useRouter()
 
-const { nodes, loadNodes, createNode } = nodesSessionManager()
+  const { nodes, loadNodes, createNode } = nodesSessionManager()
 
-const form = ref({
-  title: '',
-  message: '',
-  options: [],
-})
-
-const addOption = () => {
-  form.value.options.push({
-    _id: crypto.randomUUID(),
-    text: '',
-    next_node: ''
+  const form = ref({
+    title: '',
+    message: '',
+    options: [],
   })
-}
 
-const removeOption = (index) => {
-  form.value.options.splice(index, 1)
-}
+  const addOption = () => {
+    form.value.options.push({
+      _id: crypto.randomUUID(),
+      text: '',
+      next_node: ''
+    })
+  }
 
-const submitForm = () => {
-  createNode(form.value)
-  router.push('/admin')
-}
+  const removeOption = (index) => {
+    form.value.options.splice(index, 1)
+  }
 
-onMounted(() => {
-  loadNodes()
-})
+  const submitForm = () => {
+    createNode(form.value)
+    router.push('/admin')
+  }
+
+  onMounted(() => {
+    loadNodes()
+  })
 </script>
 
 <style>

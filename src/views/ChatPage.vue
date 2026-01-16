@@ -46,110 +46,110 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue'
-import ChatMessage from '@/components/chat/ChatMessage.vue'
-import ChatOption from '@/components/chat/ChatOption.vue'
-import ChatHistory from '@/components/chat/ChatHistory.vue'
-import { nodesSessionManager } from '@/stores/nodesSessionManager.js' 
-import { chatSessionManager } from '@/stores/chatSessionManager'
+  import { ref, onMounted, nextTick, watch } from 'vue'
+  import ChatMessage from '@/components/chat/ChatMessage.vue'
+  import ChatOption from '@/components/chat/ChatOption.vue'
+  import ChatHistory from '@/components/chat/ChatHistory.vue'
+  import { nodesSessionManager } from '@/stores/nodesSessionManager.js' 
+  import { chatSessionManager } from '@/stores/chatSessionManager'
 
-const { loadNodes, loadNode } = nodesSessionManager()
-const { saveChatState, saveCurrentNode, saveMessageFlow, getChatState, getCurrentNode, getMessageFlow, } = chatSessionManager();
+  const { loadNodes, loadNode } = nodesSessionManager()
+  const { saveChatState, saveCurrentNode, saveMessageFlow, getChatState, getCurrentNode, getMessageFlow, } = chatSessionManager();
 
-const messages = ref([])
-const currentNode = ref(null)
-const nodeHistory = ref([])
+  const messages = ref([])
+  const currentNode = ref(null)
+  const nodeHistory = ref([])
 
-const loading = ref(true)
+  const loading = ref(true)
 
-const bottomAnchor = ref(null)
+  const bottomAnchor = ref(null)
 
-const showFlow = ref(false)
+  const showFlow = ref(false)
 
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-const scrollToBottom = () => {
-  nextTick(() => {
-    setTimeout(() => {
-      if (bottomAnchor.value) {
-        bottomAnchor.value.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'end'
-        });
-      }
-    }, 50)
+  const scrollToBottom = () => {
+    nextTick(() => {
+      setTimeout(() => {
+        if (bottomAnchor.value) {
+          bottomAnchor.value.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'end'
+          });
+        }
+      }, 50)
+    })
+  }
+
+  onMounted(async () => {
+    const chatState = await getChatState()
+    if ( chatState.length === 0 ) {
+      await loadNodes()
+      currentNode.value = await loadNode(1)
+
+      nodeHistory.value.push({
+        title: "Inicio",
+        message: currentNode.value.message,
+        from: "bot"
+      })
+
+      loading.value = false
+
+      saveCurrentNode(currentNode.value)
+      saveMessageFlow(nodeHistory.value)
+
+
+      scrollToBottom()
+    } else {
+      loading.value = false
+
+      messages.value = await getChatState()
+      currentNode.value = await getCurrentNode()
+      nodeHistory.value = await getMessageFlow()
+
+      scrollToBottom()
+    }
   })
-}
 
-onMounted(async () => {
-  const chatState = await getChatState()
-  if ( chatState.length === 0 ) {
-    await loadNodes()
-    currentNode.value = await loadNode(1)
+  const selectOption = async (option) => {
+    messages.value.push({ from: 'bot', text: currentNode.value.message })
+    messages.value.push({ from: 'user', text: option.text })
 
     nodeHistory.value.push({
-      title: "Inicio",
-      message: currentNode.value.message,
-      from: "bot"
+      message: option.text,
+      from: "user"
     })
 
-    loading.value = false
+    currentNode.value = null
 
+    await sleep(900)
+
+    currentNode.value = await loadNode(option.next_node)
+    nodeHistory.value.push(currentNode.value)
+
+    saveChatState(messages.value)
     saveCurrentNode(currentNode.value)
     saveMessageFlow(nodeHistory.value)
 
-
-    scrollToBottom()
-  } else {
-    loading.value = false
-
-    messages.value = await getChatState()
-    currentNode.value = await getCurrentNode()
-    nodeHistory.value = await getMessageFlow()
-
     scrollToBottom()
   }
-})
-
-const selectOption = async (option) => {
-  messages.value.push({ from: 'bot', text: currentNode.value.message })
-  messages.value.push({ from: 'user', text: option.text })
-
-  nodeHistory.value.push({
-    message: option.text,
-    from: "user"
-  })
-
-  currentNode.value = null
-
-  await sleep(900)
-
-  currentNode.value = await loadNode(option.next_node)
-  nodeHistory.value.push(currentNode.value)
-
-  saveChatState(messages.value)
-  saveCurrentNode(currentNode.value)
-  saveMessageFlow(nodeHistory.value)
-
-  scrollToBottom()
-}
 
 </script>
 
 <style>
-.slide-up {
-  animation: slideUp 0.3s ease-out forwards;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
+  .slide-up {
+    animation: slideUp 0.3s ease-out forwards;
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
-}
 </style>

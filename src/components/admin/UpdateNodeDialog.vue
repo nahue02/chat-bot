@@ -13,7 +13,7 @@
           <div class="mt-8">
             <v-text-field v-model="form.title" variant="plain" label="Title"/>
 
-            <v-textarea v-model="form.message" label="Text" variant="plain" placeholder="Use **text** to bold text" rows="4" auto-grow required/>
+            <v-textarea v-model="form.message" label="Text" variant="plain" placeholder="Surround text with ** to bold." rows="4" auto-grow required/>
 
             <div class="border pa-5 mb-6 rounded-lg">
               <div class="d-flex justify-space-between align-center mb-4">
@@ -42,7 +42,7 @@
     
             <v-card-actions class="d-flex justify-end">
               <v-btn @click="destroy" variant="tonal" color="primary">Delete Node</v-btn>
-              <v-btn type="submit" >Save Changes</v-btn>
+              <v-btn type="submit" @click="reload" >Save Changes</v-btn>
             </v-card-actions>
           </div>
         </form>
@@ -50,79 +50,82 @@
   </v-dialog>
 </template>
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
+  import { ref, watch, onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { nodesSessionManager } from '@/stores/nodesSessionManager.js'
 
-const props = defineProps({
-  nodeId: String,
-  modelValue: Boolean
-})
-
-
-const emit = defineEmits(['update:modelValue'])
-const router = useRouter()
-const { nodes, loadNodes, loadNode, updateNode, deleteNode } = nodesSessionManager();
-
-const form = ref({
-  title: '',
-  message: '',
-  options: []
-})
-
-onMounted(async () => {
-  await loadNodes()
-
-  if (props.nodeId) {
-    const data = await loadNode(props.nodeId)
-    console.log(data)
-    if (data) loadForm(data)
-  }
-})
-
-const localModel = ref(props.modelValue)
-
-watch(() => props.modelValue, val => localModel.value = val)
-watch(localModel, val => emit('update:modelValue', val))
-
-const closeDialog = () => {
-  localModel.value = false
-}
-
-const addOption = () => {
-  form.value.options.push({
-    _id: crypto.randomUUID(),
-    text: '',
-    next_node: ''
+  const props = defineProps({
+    nodeId: String,
+    modelValue: Boolean
   })
-}
 
-const removeOption = (index) => {
-  form.value.options.splice(index, 1)
-}
 
-const submitForm = async () => {
-  updateNode(props.nodeId, form.value)
-  closeDialog()
-}
+  const emit = defineEmits(['update:modelValue'])
+  const router = useRouter()
+  const { nodes, loadNodes, loadNode, updateNode, deleteNode } = nodesSessionManager();
 
-async function loadForm(data) {
-  form.value = {
-    title: data.title,
-    message: data.message,
-    options: data.node_options?.map(opt => ({
-      _id: crypto.randomUUID(),
-      text: opt.text,
-      next_node: opt.next_node
-    })) || []
+  const form = ref({
+    title: '',
+    message: '',
+    options: []
+  })
+
+  onMounted(async () => {
+    await loadNodes()
+
+    if (props.nodeId) {
+      const data = await loadNode(props.nodeId)
+      console.log(data)
+      if (data) loadForm(data)
+    }
+  })
+
+  const localModel = ref(props.modelValue)
+
+  watch(() => props.modelValue, val => localModel.value = val)
+  watch(localModel, val => emit('update:modelValue', val))
+
+  const closeDialog = () => {
+    localModel.value = false
   }
-}
 
-async function destroy() {
-  console.log(props.nodeId)
-  deleteNode(props.nodeId)
-  router.go('/admin')
-}
+  const addOption = () => {
+    form.value.options.push({
+      _id: crypto.randomUUID(),
+      text: '',
+      next_node: ''
+    })
+  }
+
+  const removeOption = (index) => {
+    form.value.options.splice(index, 1)
+  }
+
+  const submitForm = async () => {
+    updateNode(props.nodeId, form.value)
+    closeDialog()
+  }
+
+  async function loadForm(data) {
+    form.value = {
+      title: data.title,
+      message: data.message,
+      options: data.node_options?.map(opt => ({
+        _id: crypto.randomUUID(),
+        text: opt.text,
+        next_node: opt.next_node
+      })) || []
+    }
+  }
+
+  async function destroy() {
+    deleteNode(props.nodeId)
+    router.go('/admin')
+  }
+
+  async function reload() {
+    router.go('/admin')
+  }
 </script>
 
 <style>

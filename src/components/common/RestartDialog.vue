@@ -6,19 +6,19 @@
   >
     <v-card color="#09090b" class="border rounded-xl pt-2 pb-2 ps-1 pe-1">
       <v-card-title class="text-h6">
-        Are you sure you want to restart all the data?
+        Reset all data?
       </v-card-title>
 
       <v-card-text>
-        All the nodes you created or edited will be deleted. Continue?
+        All created or edited nodes will be lost. Are you sure you want to continue?
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="primary" text @click="reload">
-          Do it
-        </v-btn>
         <v-btn text @click="emit('update:modelValue', false)">
           Cancel
+        </v-btn>
+        <v-btn color="primary" text @click="reload">
+          Do it
         </v-btn>
       </v-card-actions>
     </v-card>

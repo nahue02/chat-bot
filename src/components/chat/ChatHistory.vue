@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="ms-3 me-3 mb-2">Message Flow</h4>
+    <h4 class="ms-3 me-3 mb-2">Node Flow</h4>
     <v-divider></v-divider>
     <v-timeline class="ms-3 me-3" density="compact" >
       <v-timeline-item
