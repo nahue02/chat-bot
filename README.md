@@ -2,7 +2,7 @@
 
 A visual playground to design and test conversational logic using a node-based interface.
 
-### Why I built this
+### About
 
 I started this project to practice **Vue 3** and some state management. I wanted to try building something entertaining, and this is what I came up with. Hope you enjoy it.
 
