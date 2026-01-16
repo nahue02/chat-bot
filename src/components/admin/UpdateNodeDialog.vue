@@ -42,7 +42,7 @@
     
             <v-card-actions class="d-flex justify-end">
               <v-btn @click="destroy" variant="tonal" color="primary">Delete Node</v-btn>
-              <v-btn type="submit" @click="closeDialog" >Save Changes</v-btn>
+              <v-btn @click="update" >Save Changes</v-btn>
             </v-card-actions>
           </div>
         </form>
@@ -101,11 +101,6 @@
     form.value.options.splice(index, 1)
   }
 
-  const submitForm = async () => {
-    updateNode(props.nodeId, form.value)
-    closeDialog()
-  }
-
   async function loadForm(data) {
     form.value = {
       title: data.title,
@@ -120,6 +115,11 @@
 
   async function destroy() {
     await deleteNode(props.nodeId)
+    closeDialog()
+  }
+
+  async function update() {
+    await updateNode(props.nodeId, form.value)
     closeDialog()
   }
 </script>
